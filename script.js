@@ -1,13 +1,20 @@
 /***** CONFIG *****/
+// Google Apps Script 최종 배포 주소(googleusercontent 버전)
 const BACKEND_URL =
-  'https://script.google.com/macros/s/AKfycbzrSorTKSzra0SohS883QTBviEl6u174Inc-Z0in14exezm-IlqsNZfcRK2s2pLiCby/exec';
+  'https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLgCsePn2dKAqn8sdB87dI9OsWc57Qs4W2pYE4V-F1zFJuD65cGyEjEfGB4R_2OxuX97HMZhLq-Ohd1bHAVAUl88XKpUNnugUm2seTzBh_AZ6HRN03H_1Ctn-jbTk_c8lJsxZ2XvMsNCa-eTMxyO7J1ZYYsBj7vLsundmobLz55lYMXqmGh3T_HfR5YLc-UT29ZlAd_YGQaFMI4djIArxaymTkyCtF7D1v8Vj-8-moMHIVijHuUIb_Wc32lzwPwAgtsMGyixrapUnH0GzCp9Fb8KGCdkT_L2L8f_m6xQCWcEU05j__M&lib=M_HeVvk3zo_8-jKmOWvRGHGf4QMM86CMa';
+
+// Apps Script의 ADMIN_TOKEN과 동일해야 함
 const BACKEND_ADMIN_TOKEN = 'maple_8246_SUPER_SECRET_1f9c8c2d9e';
+
+// googleusercontent URL은 이미 ?가 있으므로 & 로 action 추가
+const withAction = (action) =>
+  `${BACKEND_URL}${BACKEND_URL.includes('?') ? '&' : '?'}action=${encodeURIComponent(action)}`;
 
 /***** 공통 *****/
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-/***** 홈: 복사 버튼 *****/
+/***** 홈: 카카오 아이디 복사 *****/
 const copyBtn = document.getElementById('copyBtn');
 if (copyBtn) {
   copyBtn.addEventListener('click', async () => {
@@ -20,7 +27,7 @@ if (copyBtn) {
   });
 }
 
-/***** 후기 관련 *****/
+/***** 후기 상태 *****/
 let adminMode = false;
 const reviewForm = document.getElementById('reviewForm');
 const listEl = document.getElementById('reviews');
@@ -38,50 +45,61 @@ function stars(n) {
 }
 
 /***** API 통신 *****/
+// 목록: GET
 async function apiList() {
-  const res = await fetch(`${BACKEND_URL}?action=list`, { method: 'GET' });
-  return res.json();
+  const res = await fetch(withAction('list'), { method: 'GET' });
+  return res.json(); // { ok, items: [...] }
 }
 
-// ✅ 여기가 방금 말한 apiAdd 함수 완성 버전
+// 등록: POST (본문과 URL 둘 다 action 포함)
 async function apiAdd({ name, rating, content }) {
-  const data = { action: 'add', name, rating: String(rating), content };
-  const res = await fetch(BACKEND_URL, {
+  const body = new URLSearchParams({
+    action: 'add',
+    name,
+    rating: String(rating),
+    content
+  }).toString();
+
+  const res = await fetch(withAction('add'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(data).toString()
+    body
   });
+
   const text = await res.text();
-  try {
-    return JSON.parse(text);
-  } catch {
-    return { ok: false, error: 'PARSE_FAIL', raw: text };
-  }
+  try { return JSON.parse(text); }
+  catch { return { ok: false, error: 'PARSE_FAIL', raw: text }; }
 }
 
+// 삭제: POST
 async function apiDelete(id) {
-  const data = { action: 'delete', id, adminToken: BACKEND_ADMIN_TOKEN };
-  const res = await fetch(BACKEND_URL, {
+  const body = new URLSearchParams({
+    action: 'delete',
+    id,
+    adminToken: BACKEND_ADMIN_TOKEN
+  }).toString();
+
+  const res = await fetch(withAction('delete'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(data).toString()
+    body
   });
+
   const text = await res.text();
-  try {
-    return JSON.parse(text);
-  } catch {
-    return { ok: false, error: 'PARSE_FAIL', raw: text };
-  }
+  try { return JSON.parse(text); }
+  catch { return { ok: false, error: 'PARSE_FAIL', raw: text }; }
 }
 
-/***** 후기 렌더링 *****/
+/***** 렌더링 *****/
 async function renderReviews() {
   if (!listEl) return;
+
   try {
     const { ok, items = [] } = await apiList();
     if (!ok) throw 0;
 
     cntEl && (cntEl.textContent = `${items.length}건`);
+
     if (!items.length) {
       listEl.innerHTML = '<p class="card">아직 후기가 없습니다. 첫 리뷰를 남겨주세요!</p>';
       avgEl && (avgEl.textContent = '-');
@@ -99,8 +117,12 @@ async function renderReviews() {
         ? `<button class="del" data-id="${escapeHtml(r.id)}" style="float:right">삭제</button>`
         : '';
       div.className = 'review';
-      div.innerHTML = `<div class="name">${escapeHtml(r.name)} <span class="meta">· ${stars(r.rating)} · ${dateStr}</span> ${delBtn}</div>
-                       <div class="content">${escapeHtml(r.content)}</div>`;
+      div.innerHTML = `
+        <div class="name">${escapeHtml(r.name)}
+          <span class="meta">· ${stars(r.rating)} · ${dateStr}</span>
+          ${delBtn}
+        </div>
+        <div class="content">${escapeHtml(r.content)}</div>`;
       listEl.appendChild(div);
     });
 
@@ -109,10 +131,7 @@ async function renderReviews() {
         btn.addEventListener('click', async () => {
           if (!confirm('정말 삭제하시겠어요?')) return;
           const res = await apiDelete(btn.getAttribute('data-id'));
-          if (!res.ok) {
-            alert('삭제 오류:\n' + JSON.stringify(res, null, 2));
-            return;
-          }
+          if (!res.ok) { alert('삭제 오류:\n' + JSON.stringify(res, null, 2)); return; }
           await renderReviews();
         });
       });
@@ -122,9 +141,9 @@ async function renderReviews() {
   }
 }
 
-/***** 후기 등록 이벤트 *****/
+/***** 제출 *****/
 if (reviewForm) {
-  reviewForm.addEventListener('submit', async e => {
+  reviewForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     formMsg && (formMsg.textContent = '');
 
@@ -153,9 +172,9 @@ if (reviewForm) {
   });
 }
 
-/***** 관리자 모드 (PIN: 8246) *****/
+/***** 숨김 관리자 모드 (PIN: 8246) *****/
 let secretKeys = [];
-window.addEventListener('keydown', e => {
+window.addEventListener('keydown', (e) => {
   secretKeys.push(e.key);
   if (secretKeys.slice(-4).join('') === '8246') {
     const input = prompt('관리자 PIN을 입력하세요:');
@@ -164,12 +183,14 @@ window.addEventListener('keydown', e => {
       alert('관리자 모드 활성화');
       adminStateEl && (adminStateEl.textContent = '관리자 모드: 삭제 가능');
       renderReviews();
-    } else alert('PIN이 올바르지 않습니다.');
+    } else {
+      alert('PIN이 올바르지 않습니다.');
+    }
     secretKeys = [];
   }
 });
 
-window.addEventListener('keydown', e => {
+window.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'a') {
     const input = prompt('관리자 PIN을 입력하세요:');
     if (input === '8246') {
