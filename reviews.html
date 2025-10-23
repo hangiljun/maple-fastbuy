@@ -1,54 +1,67 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>메이플 급처템 구매 후기 게시판</title>
-<meta name="description" content="실시간 후기와 별점. 빠른 거래와 안전 정산에 대한 실제 이용자 평가를 확인하세요." />
-<link rel="canonical" href="/reviews.html" />
-<link rel="stylesheet" href="/style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>메이플 급처템 구매 후기 | 실시간 별점 & 리뷰 | HAN8246</title>
+  <meta name="description" content="실제 이용자 후기와 별점을 확인하세요. 빠른 거래, 안전한 정산 후기 계속 업데이트!">
+  <meta name="keywords" content="메이플스토리 후기, 급처템 후기, 메이플템 매입 후기, 거래 후기, HAN8246">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://maple-fastbuy.vercel.app/reviews.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="메이플 급처템 다삼">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="메이플 급처템 구매 후기 | 실시간 별점 & 리뷰">
+  <meta property="og:description" content="실제 이용자 후기와 별점 공개. 빠른 거래 · 안전 정산 만족도 확인!">
+  <meta property="og:url" content="https://maple-fastbuy.vercel.app/reviews.html">
+  <meta property="og:image" content="https://maple-fastbuy.vercel.app/og-image.png">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header class="container">
-<nav class="nav">
-<a class="logo" href="/">메이플 급처템 다삼</a>
-<ul>
-<li><a href="/method.html">거래방법</a></li>
-<li><a class="active" href="/reviews.html">후기 게시판</a></li>
-</ul>
-</nav>
-</header>
+  <header class="container">
+    <nav class="nav">
+      <a class="logo" href="index.html">메이플 급처템 다삼</a>
+      <ul>
+        <li><a href="method.html">거래방법</a></li>
+        <li><a href="reviews.html" class="active">후기 게시판</a></li>
+      </ul>
+    </nav>
+  </header>
 
+  <main class="container">
+    <section class="hero">
+      <h1>실시간 거래 후기 & 별점</h1>
+      <p class="sub">실제 이용자들의 평가와 후기를 확인하세요.</p>
+    </section>
 
-<main class="container">
-<h1>후기 게시판</h1>
+    <section class="reviews">
+      <div class="review-form card">
+        <h3>후기 남기기</h3>
+        <form id="reviewForm">
+          <label>닉네임</label>
+          <input type="text" id="name" required placeholder="닉네임 입력" />
+          <label>후기 내용</label>
+          <textarea id="content" required placeholder="후기를 입력해주세요."></textarea>
+          <button type="submit" class="btn">등록</button>
+        </form>
+      </div>
 
+      <div class="review-list" id="reviewList"></div>
+    </section>
+  </main>
 
-<form id="reviewForm" class="card form">
-<label>닉네임<input name="name" required maxlength="20" placeholder="메린이" /></label>
-<label>별점<select name="rating" required>
-<option value="5">★★★★★ (5)</option>
-<option value="4">★★★★☆ (4)</option>
-<option value="3">★★★☆☆ (3)</option>
-<option value="2">★★☆☆☆ (2)</option>
-<option value="1">★☆☆☆☆ (1)</option>
-</select></label>
-<label>후기<textarea name="content" rows="4" maxlength="300" placeholder="빠르고 친절했어요!" required></textarea></label>
-<button type="submit">후기 등록</button>
-</form>
+  <footer class="footer">
+    <div class="container">
+      <small>© <span id="year"></span> 메이플 급처템 다삼 · 문의: 카카오톡 <b>HAN8246</b></small>
+    </div>
+  </footer>
 
-
-<section id="reviews" class="reviews"></section>
-</main>
-
-
-<footer class="footer">
-<div class="container">
-<small>© <span id="year"></span> 메이플 급처템 다삼 · 문의: 카카오톡 <b>HAN8246</b></small>
-</div>
-</footer>
-
-
-<script src="/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
