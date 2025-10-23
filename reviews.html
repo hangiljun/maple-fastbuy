@@ -6,11 +6,9 @@
 
   <title>메이플 급처템 구매 후기 | 실시간 별점 & 리뷰 | HAN8246</title>
   <meta name="description" content="실제 이용자 후기와 별점을 확인하세요. 빠른 거래, 안전한 정산 후기 계속 업데이트!">
-  <meta name="keywords" content="메이플스토리 후기, 급처템 후기, 메이플템 매입 후기, 거래 후기, HAN8246">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://maple-fastbuy.vercel.app/reviews.html">
 
-  <!-- Open Graph -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="메이플 급처템 다삼">
   <meta property="og:locale" content="ko_KR">
@@ -35,9 +33,21 @@
   </header>
 
   <main class="container">
-    <section class="hero">
-      <h1>실시간 거래 후기 & 별점</h1>
-      <p class="sub">실제 이용자들의 평가와 후기를 확인하세요.</p>
+    <section class="hero" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>
+        <h1>실시간 거래 후기 & 별점</h1>
+        <p class="sub">실제 이용자들의 평가와 후기를 확인하세요.</p>
+      </div>
+
+      <!-- 관리자 패널 (로컬 전용) -->
+      <div class="card" style="padding:10px 12px">
+        <form id="adminForm" style="display:flex;gap:8px;align-items:center">
+          <input type="password" id="adminPin" placeholder="관리자 PIN" style="width:120px" />
+          <button type="submit">관리자 모드</button>
+          <button type="button" id="adminOff" style="display:none">해제</button>
+        </form>
+        <small class="sub" id="adminState" style="display:block;margin-top:6px">일반 모드</small>
+      </div>
     </section>
 
     <!-- 요약 카드 -->
