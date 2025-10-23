@@ -1,13 +1,13 @@
 /***** CONFIG *****/
-// 1) 네가 준 googleusercontent 최종 URL (그대로)
+// ① 네가 준 googleusercontent 최종 URL (그대로 붙여넣기)
 const GOOGLEUSERCONTENT_URL =
   'https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhZ2lWEOY6Pudjane0L4m_h3Dfb_Agcecpi9_dESzHJsNHdTNTLTx0f37m7Xf-DdDHXuud5eX_MLnzS9AEmQNs9pYzHmGOL24fxtHTD8ScQaDS6FSieLautg3ZTZXplec3oXxM3fTQmAFpYsycVwg4JCir_yN1QkhbFi-BHbYb8IVelzTKZmxdCJVezd7uGYDng2ouzsJd-FVUsf8GuQ0FAoqYUCLQztZzPl0HbdF77uF2s1LEWLdTyRhhw6acbXZzNwV0JPGRLx2C8OasvVXrDO7huhA&lib=M_HeVvk3zo_8-jKmOWvRGHGf4QMM86CMa';
 
-// 2) 새로 받은 exec 주소 (필요시 자동 리다이렉트)
+// ② 새로 받은 exec 주소
 const EXEC_URL =
   'https://script.google.com/macros/s/AKfycbyhpchkRE_AIog_gNZ194gZTFFXzpoxRC3oZbDLBa5i7OYPsrrKoPSJNz92CY9EgWqx/exec';
 
-// 자동 시도 순서: googleusercontent → exec
+// 다중 URL 자동 시도 순서
 const BACKEND_URLS = [GOOGLEUSERCONTENT_URL, EXEC_URL];
 
 // 삭제용 관리자 토큰 (Code.gs와 동일)
@@ -17,7 +17,7 @@ const BACKEND_ADMIN_TOKEN = 'maple_8246_SUPER_SECRET_1f9c8c2d9e';
 const qs = (obj) => Object.entries(obj).map(([k,v]) =>
   `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
 
-/***** 공통 *****/
+/***** 공통 UI *****/
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -27,7 +27,7 @@ if (copyBtn) copyBtn.addEventListener('click', async ()=>{
   catch { alert('복사에 실패했습니다. 직접 입력해주세요: HAN8246'); }
 });
 
-/***** DOM *****/
+/***** DOM refs *****/
 let adminMode = false;
 const reviewForm   = document.getElementById('reviewForm');
 const listEl       = document.getElementById('reviews');
@@ -42,7 +42,6 @@ const stars = (n)=>'★'.repeat(clampStar(n)) + '☆'.repeat(5-clampStar(n));
 
 /***** 백엔드 호출 (여러 URL 순차 재시도) *****/
 async function fetchJSONFromAny(urlMakers) {
-  // urlMakers: 함수 배열(() => url)
   let lastErr = null, lastRaw = null;
   for (const make of urlMakers) {
     const url = make();
