@@ -1,52 +1,40 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>후기 게시판 | 메이플 급처템 구매</title>
-  <meta name="description" content="메이플스토리 급처템 안전 구매 후기 게시판">
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    .container { max-width: 900px; margin: 40px auto; padding: 0 16px; }
-    .h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
-    .sub { color:#666; margin-bottom: 20px; }
-    .stats { display:flex; gap:16px; align-items:center; margin: 8px 0 20px; color:#333; }
-    .card { border:1px solid #eee; border-radius:12px; padding:16px; background:#fff; }
-    form .row { display:flex; gap:12px; flex-wrap:wrap; }
-    form input, form select, form textarea { width:100%; padding:10px; border:1px solid #ddd; border-radius:10px; font-size:14px; }
-    form .row > * { flex:1; min-width: 180px; }
-    form button { padding:10px 16px; border:0; border-radius:10px; background:#2563eb; color:#fff; cursor:pointer; }
-    form button:disabled { opacity:.6; cursor:not-allowed; }
-    #formMsg { margin-top:8px; color:#2563eb; font-size:13px; }
-    .review { border:1px solid #eee; border-radius:12px; padding:14px; margin-bottom:12px; background:#fff; }
-    .name { font-weight:600; }
-    .meta { color:#666; font-weight:400; font-size:13px; margin-left:6px; }
-    .content { margin-top:8px; white-space:pre-wrap; line-height:1.5; }
-    .del { float:right; margin-left:8px; border:1px solid #f33; color:#f33; background:#fff; padding:4px 8px; border-radius:8px; cursor:pointer; }
-    .adminState { color:#0a7; font-size:12px; margin-left:8px; }
-    .muted { color:#666; font-size:13px; }
-    footer { margin:40px 0 12px; text-align:center; color:#777; font-size:13px; }
-    .hint { font-size:12px; color:#999; margin-top:6px; }
-  </style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>후기 게시판 | Maple FastBuy</title>
+  <meta name="description" content="메이플스토리 급처템 후기 게시판 - 안전한 거래 후기와 평점을 확인하세요.">
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <div class="container">
-    <div class="h1">고객 후기</div>
-    <div class="sub">거래 만족도를 남겨주세요. 악성/광고는 관리자 모드에서 삭제됩니다.</div>
-
-    <div class="stats">
-      <div><strong>평균 평점</strong> <span id="avgRating">-</span></div>
-      <div class="muted">|</div>
-      <div><strong>총 후기</strong> <span id="countRating">0건</span></div>
-      <div id="adminState" class="adminState"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div>
+        <div class="h1">고객 후기</div>
+        <div class="sub">실거래 기반 후기입니다. 광고/악성 글은 관리자에 의해 삭제될 수 있습니다.</div>
+        <div class="stats">
+          <span class="badge"><strong>평균</strong> <span id="avgRating" style="margin-left:6px">-</span></span>
+          <span class="badge"><strong>총 후기</strong> <span id="countRating" style="margin-left:6px">0건</span></span>
+          <span id="adminState" class="badge green" style="display:none">관리자 모드</span>
+        </div>
+      </div>
+      <div>
+        <!-- 관리자 툴바 (관리자 모드에서만 노출) -->
+        <div id="adminToolbar" style="display:none;gap:8px" class="row">
+          <button class="btn small ghost" id="btnExport">백업(다운로드)</button>
+          <button class="btn small ghost" id="btnImport">복원(업로드)</button>
+          <button class="btn small danger" id="btnClear">전체 삭제</button>
+        </div>
+      </div>
     </div>
 
-    <div class="card" style="margin-bottom:16px;">
+    <div class="card pad" style="margin-top:16px;">
       <form id="reviewForm">
         <div class="row">
           <div>
             <label for="name">닉네임</label>
-            <input id="name" name="name" maxlength="20" placeholder="닉네임" />
+            <input id="name" name="name" maxlength="20" placeholder="닉네임"/>
           </div>
           <div>
             <label for="rating">평점</label>
@@ -59,24 +47,32 @@
             </select>
           </div>
         </div>
-        <div style="margin-top:12px;">
+        <div style="margin-top:10px;">
           <label for="content">후기 내용</label>
           <textarea id="content" name="content" rows="4" maxlength="1000" placeholder="매너/속도/가격 등 구체적인 후기를 적어주세요. (최대 1000자)"></textarea>
-          <div class="hint">⏱️ 관리자 모드: 키보드로 8246 입력 → 삭제 버튼 표시 / Ctrl+Alt+D = 전체 초기화</div>
+          <div class="sub" style="margin-top:6px">
+            관리자 모드: 키보드로 <span class="kbd">8246</span> 입력 → 삭제 버튼 보임 ·
+            토글: <span class="kbd">Ctrl</span>+<span class="kbd">Alt</span>+<span class="kbd">A</span>
+          </div>
         </div>
-        <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
-          <button type="submit">후기 등록</button>
-          <div id="formMsg"></div>
+        <div class="row" style="margin-top:10px;align-items:center">
+          <div style="flex:0">
+            <button class="btn brand" type="submit">후기 등록</button>
+          </div>
+          <div id="formMsg" style="color:#9dc1ff"></div>
         </div>
       </form>
     </div>
 
-    <div id="reviews"></div>
+    <div class="divider"></div>
 
-    <footer>
-      © <span id="year"></span> Maple FastBuy • <span class="muted">이 페이지의 후기는 현재 기기(브라우저)에 저장됩니다.</span>
-    </footer>
+    <div class="list-gap" id="reviews"></div>
+
+    <div class="footer">© <span id="year"></span> Maple FastBuy · 한 톤의 디자인과 가독성으로 정리된 후기</div>
   </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input type="file" id="fileInput" accept="application/json" style="display:none" />
 
   <script src="script.js"></script>
 </body>
