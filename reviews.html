@@ -4,70 +4,32 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>후기 게시판 | Maple FastBuy</title>
-  <meta name="description" content="메이플스토리 급처템 구매 후기 게시판">
-  <!-- 기존 전역 CSS가 있다면 그대로 두세요 -->
+  <meta name="description" content="메이플스토리 급처템 후기 게시판 - 안전한 거래 후기와 평점을 확인하세요.">
   <link rel="stylesheet" href="styles.css"/>
-
-  <!-- ✅ 페이지 전용 스타일(다른 페이지와 충돌 방지: .reviews-page 네임스페이스) -->
-  <style>
-    .reviews-page { max-width: 920px; margin: 40px auto; padding: 0 16px; font-family: system-ui, -apple-system, "Noto Sans KR", sans-serif; }
-    .reviews-page .header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-    .reviews-page .h1 { font-size: 24px; font-weight: 800; margin:0; }
-    .reviews-page .sub { color:#666; margin:6px 0 10px; }
-    .reviews-page .stats { display:flex; gap:10px; align-items:center; color:#555; margin: 6px 0 16px; font-size:14px; }
-    .reviews-page .chip { display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid #e6e6e6; border-radius:999px; background:#fafafa; }
-    .reviews-page .chip.green { border-color:#bee2c3; background:#f4fff7; color:#0a7; }
-    .reviews-page .card { background:#fff; border:1px solid #eee; border-radius:12px; padding:16px; }
-    .reviews-page .row { display:flex; gap:12px; flex-wrap:wrap; }
-    .reviews-page .row > * { flex:1; min-width: 200px; }
-    .reviews-page label { display:block; font-size:12px; color:#666; margin-bottom:6px; }
-    .reviews-page input, .reviews-page select, .reviews-page textarea {
-      width:100%; padding:10px 12px; border:1px solid #ddd; border-radius:10px; font-size:14px; outline:none;
-    }
-    .reviews-page input:focus, .reviews-page select:focus, .reviews-page textarea:focus { border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.15); }
-    .reviews-page button.btn { padding:10px 14px; border:0; border-radius:10px; background:#2563eb; color:#fff; cursor:pointer; font-weight:600; }
-    .reviews-page button.btn.ghost { background:#f3f5f9; color:#333; }
-    .reviews-page button.btn.danger { background:#fff; color:#e11d48; border:1px solid #fecdd3; }
-    .reviews-page .hint { font-size:12px; color:#888; margin-top:6px; }
-    .reviews-page .divider { height:1px; background:#eee; margin:18px 0; }
-    .reviews-page .review { border:1px solid #eee; border-radius:12px; padding:14px; background:#fff; }
-    .reviews-page .list { display:grid; gap:12px; }
-    .reviews-page .name { font-weight:700; }
-    .reviews-page .meta { color:#666; font-weight:400; font-size:13px; margin-left:8px; }
-    .reviews-page .content { margin-top:8px; white-space:pre-wrap; line-height:1.6; }
-    .reviews-page .del { float:right; margin-left:8px; border:1px solid #fca5a5; color:#b91c1c; background:#fff; padding:4px 8px; border-radius:8px; cursor:pointer; }
-    .reviews-page .toolbar { display:none; gap:8px; }
-    .reviews-page .toolbar.show { display:flex; }
-    .reviews-page .footer { margin:26px 0 12px; text-align:center; color:#777; font-size:13px; }
-    .reviews-page .kbd { display:inline-block; border:1px solid #e6e6e6; background:#fafafa; padding:2px 6px; border-radius:6px; color:#666; font-family:ui-monospace,monospace; font-size:12px; }
-    .reviews-page .toast {
-      position:fixed; left:50%; bottom:24px; transform:translateX(-50%);
-      padding:10px 14px; border-radius:10px; background:#0f172a; color:#fff; border:1px solid #334155;
-      box-shadow:0 8px 24px rgba(0,0,0,.25); opacity:0; pointer-events:none; transition:.25s;
-    }
-    .reviews-page .toast.show { opacity:1; }
-  </style>
 </head>
 <body>
-  <div class="reviews-page">
-    <div class="header">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
       <div>
         <div class="h1">고객 후기</div>
         <div class="sub">실거래 기반 후기입니다. 광고/악성 글은 관리자에 의해 삭제될 수 있습니다.</div>
         <div class="stats">
-          <span class="chip"><strong>평균</strong> <span id="avgRating" style="margin-left:6px">-</span></span>
-          <span class="chip"><strong>총 후기</strong> <span id="countRating" style="margin-left:6px">0건</span></span>
-          <span id="adminState" class="chip green" style="display:none">관리자 모드</span>
+          <span class="badge"><strong>평균</strong> <span id="avgRating" style="margin-left:6px">-</span></span>
+          <span class="badge"><strong>총 후기</strong> <span id="countRating" style="margin-left:6px">0건</span></span>
+          <span id="adminState" class="badge green" style="display:none">관리자 모드</span>
         </div>
       </div>
-      <div class="toolbar" id="adminToolbar">
-        <button class="btn ghost" id="btnExport">백업</button>
-        <button class="btn ghost" id="btnImport">복원</button>
-        <button class="btn danger" id="btnClear">전체 삭제</button>
+      <div>
+        <!-- 관리자 툴바 (관리자 모드에서만 노출) -->
+        <div id="adminToolbar" style="display:none;gap:8px" class="row">
+          <button class="btn small ghost" id="btnExport">백업(다운로드)</button>
+          <button class="btn small ghost" id="btnImport">복원(업로드)</button>
+          <button class="btn small danger" id="btnClear">전체 삭제</button>
+        </div>
       </div>
     </div>
 
-    <div class="card" style="margin-top:12px;">
+    <div class="card pad" style="margin-top:16px;">
       <form id="reviewForm">
         <div class="row">
           <div>
@@ -87,193 +49,31 @@
         </div>
         <div style="margin-top:10px;">
           <label for="content">후기 내용</label>
-          <textarea id="content" name="content" rows="4" maxlength="1000" placeholder="매너/속도/가격 등 구체적으로 적어주세요. (최대 1000자)"></textarea>
-          <div class="hint" style="margin-top:6px">
+          <textarea id="content" name="content" rows="4" maxlength="1000" placeholder="매너/속도/가격 등 구체적인 후기를 적어주세요. (최대 1000자)"></textarea>
+          <div class="sub" style="margin-top:6px">
             관리자 모드: 키보드로 <span class="kbd">8246</span> 입력 → 삭제 버튼 보임 ·
             토글: <span class="kbd">Ctrl</span>+<span class="kbd">Alt</span>+<span class="kbd">A</span>
           </div>
         </div>
-        <div class="row" style="margin-top:10px; align-items:center;">
-          <div style="flex:0;">
-            <button class="btn" type="submit">후기 등록</button>
+        <div class="row" style="margin-top:10px;align-items:center">
+          <div style="flex:0">
+            <button class="btn brand" type="submit">후기 등록</button>
           </div>
-          <div id="formMsg" style="color:#2563eb;"></div>
+          <div id="formMsg" style="color:#9dc1ff"></div>
         </div>
       </form>
     </div>
 
     <div class="divider"></div>
 
-    <div class="list" id="reviews"></div>
+    <div class="list-gap" id="reviews"></div>
 
-    <div class="footer">© <span id="year"></span> Maple FastBuy · 이 페이지 스타일은 다른 페이지와 겹치지 않습니다.</div>
+    <div class="footer">© <span id="year"></span> Maple FastBuy · 한 톤의 디자인과 가독성으로 정리된 후기</div>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <input type="file" id="fileInput" accept="application/json" style="display:none"/>
+  <input type="file" id="fileInput" accept="application/json" style="display:none" />
 
-  <!-- ✅ 페이지 전용 스크립트(다른 페이지와 충돌 없음) -->
-  <script>
-    (function(){
-      const STORAGE_KEY = 'mf_reviews_v3'; // 새로운 키로 분리 (기존 데이터와 충돌 방지)
-      const ADMIN_PIN = '8246';
-
-      // 유틸
-      const $ = (sel)=>document.querySelector(sel);
-      const yearEl = $('#year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
-      const toastEl = $('#toast');
-      const toast = (msg)=>{ toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(()=>toastEl.classList.remove('show'), 1600); };
-      const escapeHtml = (s)=>(s||'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
-      const stars = (n)=>{ const r=clamp(parseInt(n||5,10),1,5); return '★'.repeat(r)+'☆'.repeat(5-r); };
-      const uid = ()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-6);
-
-      // 저장/불러오기
-      const load = ()=>{ try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{return[]} };
-      const save = (arr)=>localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
-
-      // DOM
-      let admin = false;
-      const form = $('#reviewForm');
-      const listEl = $('#reviews');
-      const formMsg = $('#formMsg');
-      const avgEl = $('#avgRating');
-      const cntEl = $('#countRating');
-      const adminState = $('#adminState');
-      const adminToolbar = $('#adminToolbar');
-      const fileInput = $('#fileInput');
-
-      function render(){
-        const items = load().sort((a,b)=>new Date(b.ts)-new Date(a.ts));
-        cntEl && (cntEl.textContent = items.length + '건');
-
-        if (!items.length){
-          listEl.innerHTML = '<div class="card" style="text-align:center;color:#666;">아직 후기가 없습니다. 첫 후기를 남겨주세요! 🎉</div>';
-          avgEl && (avgEl.textContent = '-');
-        }else{
-          const avg = items.reduce((s,r)=>s+(Number(r.rating)||0),0)/items.length;
-          avgEl && (avgEl.textContent = \`\${stars(Math.round(avg))} (\${avg.toFixed(1)})\`);
-
-          listEl.innerHTML = '';
-          items.forEach(r=>{
-            const dt = new Date(r.ts);
-            const dateStr = \`\${dt.getFullYear()}.\${String(dt.getMonth()+1).padStart(2,'0')}.\${String(dt.getDate()).padStart(2,'0')}\`;
-            const div = document.createElement('div');
-            div.className = 'review';
-            div.innerHTML = \`
-              <div class="name">\${escapeHtml(r.name||'익명')}
-                <span class="meta">· \${stars(r.rating)} · \${dateStr}</span>
-                \${admin ? '<button class="del" data-id="'+escapeHtml(r.id)+'">삭제</button>' : ''}
-              </div>
-              <div class="content">\${escapeHtml(r.content||'')}</div>
-            \`;
-            listEl.appendChild(div);
-          });
-
-          if (admin){
-            listEl.querySelectorAll('button.del').forEach(btn=>{
-              btn.addEventListener('click', ()=>{
-                const id = btn.getAttribute('data-id');
-                const now = load();
-                const target = now.find(x=>x.id===id);
-                if (!target){ toast('이미 삭제되었거나 찾을 수 없습니다.'); return; }
-                if (!confirm('이 후기를 삭제할까요?\\n\\n\"'+target.content.slice(0,50)+(target.content.length>50?'…':'')+'\"')) return;
-                save(now.filter(x=>x.id!==id)); // ✅ 개별 삭제
-                render();
-                toast('후기 1건을 삭제했습니다.');
-              });
-            });
-          }
-        }
-
-        adminState.style.display = admin ? 'inline-flex' : 'none';
-        adminToolbar.classList.toggle('show', admin);
-      }
-
-      // 제출
-      if (form){
-        form.addEventListener('submit', (e)=>{
-          e.preventDefault();
-          formMsg && (formMsg.textContent = '');
-
-          const name = ($('#name').value||'').trim().slice(0,20) || '익명';
-          const rating = clamp(parseInt($('#rating').value,10)||5,1,5);
-          const content = ($('#content').value||'').trim().slice(0,1000);
-
-          if (!content){
-            formMsg ? (formMsg.textContent='후기를 입력해주세요.') : toast('후기를 입력해주세요.');
-            return;
-          }
-          const entry = { id: uid(), name, rating, content, ts: new Date().toISOString() };
-          save([entry, ...load()]);
-          form.reset();
-          formMsg && (formMsg.textContent='등록되었습니다!'); setTimeout(()=>formMsg.textContent='', 1500);
-          render();
-          toast('후기 등록 완료');
-        });
-      }
-
-      // 관리자 모드 (숫자 8246 입력 → PIN 확인 → 토글 Ctrl+Alt+A)
-      let seq = [];
-      window.addEventListener('keydown', (e)=>{
-        seq.push(e.key);
-        if (seq.slice(-4).join('') === ADMIN_PIN){
-          const pin = prompt('관리자 PIN을 입력하세요:');
-          if (pin === ADMIN_PIN){ admin = true; toast('관리자 모드 활성화'); render(); }
-          else { toast('PIN이 올바르지 않습니다.'); }
-          seq = [];
-        }
-      });
-      window.addEventListener('keydown', (e)=>{
-        if (e.ctrlKey && e.altKey && e.key.toLowerCase()==='a'){
-          const pin = prompt('관리자 PIN을 입력하세요:');
-          if (pin === ADMIN_PIN){ admin = !admin; toast(admin?'관리자 모드 ON':'관리자 모드 OFF'); render(); }
-        }
-      });
-
-      // 관리자 툴바: 전체 삭제/백업/복원
-      $('#btnClear')?.addEventListener('click', ()=>{
-        if (!admin) return;
-        if (confirm('정말 모든 후기를 삭제하시겠습니까? 되돌릴 수 없습니다.')){
-          localStorage.setItem(STORAGE_KEY, '[]');
-          render();
-          toast('모든 후기를 삭제했습니다.');
-        }
-      });
-      $('#btnExport')?.addEventListener('click', ()=>{
-        if (!admin) return;
-        const data = JSON.stringify(load(), null, 2);
-        const blob = new Blob([data], {type:'application/json'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = 'reviews-backup.json';
-        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-        toast('백업 파일을 내려받았습니다.');
-      });
-      $('#btnImport')?.addEventListener('click', ()=>{ if (admin) $('#fileInput').click(); });
-      $('#fileInput')?.addEventListener('change', (e)=>{
-        const f = e.target.files?.[0]; if (!f) return;
-        const reader = new FileReader();
-        reader.onload = ()=>{
-          try{
-            const parsed = JSON.parse(String(reader.result||'[]'));
-            if (!Array.isArray(parsed)) throw new Error('형식 오류');
-            const norm = parsed.map(r=>({
-              id: r.id || uid(),
-              name: String(r.name||'익명').slice(0,20),
-              rating: clamp(parseInt(r.rating,10)||5,1,5),
-              content: String(r.content||'').slice(0,1000),
-              ts: r.ts || new Date().toISOString()
-            }));
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(norm));
-            render(); toast('복원 완료');
-          }catch(err){ toast('복원 실패: 올바른 JSON 파일인지 확인하세요.'); }
-        };
-        reader.readAsText(f);
-      });
-
-      // init
-      render();
-    })();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
