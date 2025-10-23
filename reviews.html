@@ -40,20 +40,41 @@
       <p class="sub">실제 이용자들의 평가와 후기를 확인하세요.</p>
     </section>
 
-    <section class="reviews">
-      <div class="review-form card">
-        <h3>후기 남기기</h3>
-        <form id="reviewForm">
-          <label>닉네임</label>
-          <input type="text" id="name" required placeholder="닉네임 입력" />
-          <label>후기 내용</label>
-          <textarea id="content" required placeholder="후기를 입력해주세요."></textarea>
-          <button type="submit" class="btn">등록</button>
-        </form>
+    <!-- 요약 카드 -->
+    <section class="card" id="summaryCard" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div>
+        <div style="font-weight:800;font-size:18px">평균 별점</div>
+        <div id="avgRating" style="font-size:22px;margin-top:4px">-</div>
       </div>
-
-      <div class="review-list" id="reviewList"></div>
+      <div>
+        <div style="font-weight:800;font-size:18px">총 후기</div>
+        <div id="countRating" style="font-size:22px;margin-top:4px">0건</div>
+      </div>
     </section>
+
+    <!-- 작성 폼 -->
+    <form id="reviewForm" class="card form" style="margin-top:16px">
+      <label>닉네임
+        <input name="name" required maxlength="20" placeholder="메린이" />
+      </label>
+      <label>별점
+        <select name="rating" required>
+          <option value="5">★★★★★ (5)</option>
+          <option value="4">★★★★☆ (4)</option>
+          <option value="3">★★★☆☆ (3)</option>
+          <option value="2">★★☆☆☆ (2)</option>
+          <option value="1">★☆☆☆☆ (1)</option>
+        </select>
+      </label>
+      <label>후기
+        <textarea name="content" rows="4" maxlength="300" placeholder="빠르고 친절했어요! (최대 300자)" required></textarea>
+      </label>
+      <button type="submit">후기 등록</button>
+      <p id="formMsg" class="sub" style="margin:6px 0 0"></p>
+    </form>
+
+    <!-- 리스트 -->
+    <section id="reviews" class="reviews" aria-live="polite" style="margin-bottom:24px"></section>
   </main>
 
   <footer class="footer">
