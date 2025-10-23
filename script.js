@@ -30,20 +30,17 @@ function stars(n){const r=Math.max(1,Math.min(5,n|0));return'★'.repeat(r)+'☆
 /***** API (폼 전송) *****/
 async function apiList(){
   const res = await fetch(`${BACKEND_URL}?action=list`, { method:'GET' });
-  const data = await res.json();
-  return data;
+  return res.json();
 }
 async function apiAdd({name,rating,content}){
-  const body = new URLSearchParams({ action:'add', name, rating:String(rating), content });
-  const res = await fetch(BACKEND_URL, { method:'POST', body }); // Content-Type 자동 x-www-form-urlencoded
-  const text = await res.text();
-  try { return JSON.parse(text); } catch { return { ok:false, error:'PARSE_FAIL', raw:text }; }
+  const body = new URLSearchParams({ name, rating:String(rating), content });
+  const res = await fetch(`${BACKEND_URL}?action=add`, { method:'POST', body });
+  const text = await res.text(); try { return JSON.parse(text); } catch { return { ok:false, error:'PARSE_FAIL', raw:text }; }
 }
 async function apiDelete(id){
-  const body = new URLSearchParams({ action:'delete', id, adminToken: BACKEND_ADMIN_TOKEN });
-  const res = await fetch(BACKEND_URL, { method:'POST', body });
-  const text = await res.text();
-  try { return JSON.parse(text); } catch { return { ok:false, error:'PARSE_FAIL', raw:text }; }
+  const body = new URLSearchParams({ id, adminToken: BACKEND_ADMIN_TOKEN });
+  const res = await fetch(`${BACKEND_URL}?action=delete`, { method:'POST', body });
+  const text = await res.text(); try { return JSON.parse(text); } catch { return { ok:false, error:'PARSE_FAIL', raw:text }; }
 }
 
 /***** 렌더 *****/
@@ -51,31 +48,21 @@ async function renderReviews(){
   if (!listEl) return;
   try {
     const { ok, items=[] } = await apiList();
-    if (!ok) throw new Error('LIST_FAIL');
-
+    if (!ok) throw 0;
     cntEl && (cntEl.textContent = `${items.length}건`);
-    if (!items.length){
-      listEl.innerHTML = '<p class="card">아직 후기가 없습니다. 첫 리뷰를 남겨주세요!</p>';
-      avgEl && (avgEl.textContent = '-'); return;
-    }
+    if (!items.length){ listEl.innerHTML = '<p class="card">아직 후기가 없습니다. 첫 리뷰를 남겨주세요!</p>'; avgEl&&(avgEl.textContent='-'); return; }
     const avg = items.reduce((s,r)=>s+(Number(r.rating)||0),0)/items.length;
     avgEl && (avgEl.textContent = `${stars(Math.round(avg))} (${avg.toFixed(1)})`);
-
     listEl.innerHTML = '';
     items.forEach(r=>{
       const div = document.createElement('div');
       const dateStr = new Date(r.ts).toLocaleDateString();
-      const delBtn = adminMode ? `<button class="del" data-id="${escapeHtml(r.id)}" style="float:right">삭제</button>`:'';
+      const delBtn = adminMode ? `<button class="del" data-id="${escapeHtml(r.id)}" style="float:right">삭제</button>` : '';
       div.className='review';
-      div.innerHTML = `
-        <div class="name">${escapeHtml(r.name)}
-          <span class="meta">· ${stars(r.rating)} · ${dateStr}</span>
-          ${delBtn}
-        </div>
-        <div class="content">${escapeHtml(r.content)}</div>`;
+      div.innerHTML = `<div class="name">${escapeHtml(r.name)} <span class="meta">· ${stars(r.rating)} · ${dateStr}</span> ${delBtn}</div>
+                       <div class="content">${escapeHtml(r.content)}</div>`;
       listEl.appendChild(div);
     });
-
     if (adminMode){
       listEl.querySelectorAll('button.del').forEach(btn=>{
         btn.addEventListener('click', async ()=>{
@@ -86,9 +73,7 @@ async function renderReviews(){
         });
       });
     }
-  } catch (e) {
-    listEl.innerHTML = `<p class="card">후기를 불러오는 중 오류가 발생했습니다.</p>`;
-  }
+  } catch { listEl.innerHTML = '<p class="card">후기를 불러오지 못했습니다.</p>'; }
 }
 
 /***** 제출 *****/
@@ -101,10 +86,8 @@ if (reviewForm){
     const rating = parseInt(fd.get('rating'),10) || 5;
     const content = (fd.get('content')||'').toString().trim().slice(0,1000);
     if (!content){ formMsg ? formMsg.textContent='후기를 입력해주세요.' : alert('후기를 입력해주세요.'); return; }
-
     const res = await apiAdd({name,rating,content});
     if (!res.ok){ alert('등록 오류: '+(res.error||res.raw||'알 수 없음')); return; }
-
     reviewForm.reset();
     if (formMsg){ formMsg.textContent='등록되었습니다. 감사합니다!'; setTimeout(()=>formMsg.textContent='',2000); }
     await renderReviews();
