@@ -33,21 +33,9 @@
   </header>
 
   <main class="container">
-    <section class="hero" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-      <div>
-        <h1>실시간 거래 후기 & 별점</h1>
-        <p class="sub">실제 이용자들의 평가와 후기를 확인하세요.</p>
-      </div>
-
-      <!-- 관리자 패널 (로컬 전용) -->
-      <div class="card" style="padding:10px 12px">
-        <form id="adminForm" style="display:flex;gap:8px;align-items:center">
-          <input type="password" id="adminPin" placeholder="관리자 PIN" style="width:120px" />
-          <button type="submit">관리자 모드</button>
-          <button type="button" id="adminOff" style="display:none">해제</button>
-        </form>
-        <small class="sub" id="adminState" style="display:block;margin-top:6px">일반 모드</small>
-      </div>
+    <section class="hero">
+      <h1>실시간 거래 후기 & 별점</h1>
+      <p class="sub">실제 이용자들의 평가와 후기를 확인하세요.</p>
     </section>
 
     <!-- 요약 카드 -->
@@ -92,6 +80,9 @@
       <small>© <span id="year"></span> 메이플 급처템 다삼 · 문의: 카카오톡 <b>HAN8246</b></small>
     </div>
   </footer>
+
+  <!-- 관리자 상태 텍스트를 DOM에 두고 싶다면(선택): 숨김 처리 -->
+  <small id="adminState" style="display:none" aria-hidden="true">일반 모드</small>
 
   <script src="script.js"></script>
 </body>
