@@ -104,6 +104,18 @@
     /* 패널 */
     .panel{border:1px solid #1f2a37;background:#0c1320;border-radius:18px;padding:16px}
 
+    /* 카카오 아이디: 본문 글꼴(정자)로 보이게 */
+    .kakao-id{
+      font-family: inherit;
+      font-style: normal;
+      font-weight: 700;
+      letter-spacing: .2px;
+      background: transparent;
+      padding: 0;
+      border: 0;
+      color: var(--text);
+    }
+
     /* 푸터 */
     footer{padding:28px 0;border-top:1px solid #0f1623;color:#9fb3c8;font-size:12px}
     .foot-grid{display:grid;gap:12px;grid-template-columns:1fr;align-items:center}
@@ -194,8 +206,7 @@
   <section class="wrap">
     <h2 class="section-title">이용자 후기</h2>
     <div id="reviewsPreview" class="reviews">
-      <!-- 📌 자바스크립트로 Firestore에서 가져와서 여기에 카드 3개를 그립니다. -->
-      <!-- (자바스크립트 비활성/로딩 실패 대비용 간단 플레이스홀더) -->
+      <!-- 비활성/로딩 실패 대비 플레이스홀더 -->
       <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
       <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
       <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
@@ -211,7 +222,8 @@
     <div class="panel" style="display:grid;gap:12px">
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
         <span class="muted">카카오톡 아이디:</span>
-        <code id="kakaoId">HAN8246</code>
+        <!-- ✅ 정자(본문 글꼴)로 보이도록 span.kakao-id 사용 -->
+        <span class="kakao-id" id="kakaoId">HAN8246</span>
         <button id="copyKakao" class="btn btn-ghost">아이디 복사</button>
         <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank" rel="noopener">카카오톡으로 문의</a>
       </div>
@@ -235,7 +247,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <script>
-    // ✅ 너가 제공한 firebaseConfig 그대로 사용 (모듈이 아닌 CDN compat 방식)
+    // Firebase 설정
     const firebaseConfig = {
       apiKey: "AIzaSyBFI2xBn2STV3J3RZ0daa-Vu1pu_eL_wok",
       authDomain: "maple-fastbuy.firebaseapp.com",
@@ -269,13 +281,12 @@
       });
     });
 
-    // ====== 🔗 메인에 Firestore 최신 후기 3개 연동 ======
+    // 메인에 Firestore 최신 후기 3개 연동
     const $preview = document.getElementById('reviewsPreview');
     const esc = s => (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;","<": "&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
     const stars = n => "★".repeat(n||5)+"☆".repeat(Math.max(0,5-(n||5)));
     const fmt = ts => ts?.toDate ? ts.toDate() : new Date(ts||Date.now());
 
-    // createdAt 최신순 3개만 구독(실시간)
     reviewsCol.orderBy("createdAt","desc").limit(3).onSnapshot(snap=>{
       const items = snap.docs.map(d=>({ id:d.id, ...d.data() }));
       if(!items.length){
@@ -294,7 +305,6 @@
       `).join("");
     }, err=>{
       console.error(err);
-      // 에러 시에도 페이지가 비어 보이지 않게 안내
       $preview.innerHTML = `
         <article class="rev"><div class="meta"><span class="nick">불러오기 실패</span><span>&nbsp;</span></div><p class="muted">후기 로딩에 문제가 있습니다. 잠시 후 다시 시도해주세요.</p></article>
       `;
