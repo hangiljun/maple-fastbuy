@@ -2,130 +2,288 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Maple FastBuy | 메이플 급처템 빠른 현금화</title>
 
-  <!-- SEO 기본 -->
-  <title>메이플스토리 급처템 최고가 구매 | 전서버 24시간 빠른 거래 | HAN8246</title>
-  <meta name="description" content="메이플스토리 전서버 급처템 85% 이상 최고가 매입! 24시간 빠른 거래 · 안전한 정산 · 가위값 지원. 카카오톡 HAN8246으로 지금 문의하세요.">
-  <meta name="keywords" content="메이플스토리, 메이플 급처템, 전서버 급처템, 메이플템 매입, 급처템 거래, 최고가 매입, 빠른 거래, HAN8246">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://maple-fastbuy.vercel.app/">
+  <!-- 기본 SEO -->
+  <meta name="description" content="Maple FastBuy — 메이플 급처템을 안전하고 빠르게 현금화. 24시간 대응, 합리적 시세, 가위값/수수료 친절 안내. 후기 게시판으로 신뢰 확인!" />
+  <link rel="canonical" href="/" />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0b0f14" />
 
-  <!-- Open Graph (카톡/디코/페북 미리보기) -->
+  <!-- OG/Twitter -->
+  <meta property="og:title" content="Maple FastBuy | 메이플 급처템 빠른 현금화">
+  <meta property="og:description" content="안전하고 빠른 급처. 후기 게시판으로 신뢰 확인!">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="메이플 급처템 다삼">
-  <meta property="og:locale" content="ko_KR">
-  <meta property="og:title" content="메이플스토리 급처템 최고가 구매 | HAN8246">
-  <meta property="og:description" content="전서버 급처템 85% 이상 최고가 매입 · 24시간 빠른 거래 · 안전한 정산 · 가위값 지원">
-  <meta property="og:url" content="https://maple-fastbuy.vercel.app/">
-  <meta property="og:image" content="https://maple-fastbuy.vercel.app/og-image.png">
-
-  <!-- Twitter Card -->
+  <meta property="og:url" content="/">
+  <meta property="og:image" content="/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="메이플스토리 급처템 최고가 구매 | HAN8246">
-  <meta name="twitter:description" content="전서버 85% 이상 최고가 매입 · 24시간 빠른 거래 · 안전한 정산">
-  <meta name="twitter:image" content="https://maple-fastbuy.vercel.app/og-image.png">
 
-  <!-- 파비콘/스타일 -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
-  <link rel="stylesheet" href="style.css">
+  <!-- 파비콘 (원하면 /favicon.ico 추가) -->
+  <link rel="icon" href="/favicon.ico">
 
-  <!-- 구조화 데이터: WebSite + Service -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "메이플 급처템 다삼",
-    "url": "https://maple-fastbuy.vercel.app/",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://maple-fastbuy.vercel.app/?q={search_term_string}",
-      "query-input": "required name=search_term_string"
+  <style>
+    :root{
+      --bg:#0b0f14; --panel:#111821; --muted:#6b7a90; --text:#e9eef5; --accent:#4cc9f0; --accent-2:#90e0ef;
+      --ok:#2dd4bf; --warn:#f59e0b; --danger:#ef4444; --ring:rgba(76,201,240,.35);
+      --radius:18px;
     }
-  }
-  </script>
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,AppleSDGothicNeo,Pretendard,Inter,Arial}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+
+    /* 헤더 */
+    .header{position:sticky;top:0;z-index:50;background:rgba(11,15,20,.75);backdrop-filter:blur(6px);border-bottom:1px solid #0f1623}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:14px;height:14px;border-radius:4px;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
+    .brand b{letter-spacing:.2px}
+    .nav a.btn{margin-left:8px}
+
+    /* 버튼 */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:10px 14px;border-radius:12px;border:1px solid #223047;background:#0d1522;color:var(--text);
+      cursor:pointer;transition:transform .06s ease,box-shadow .2s ease,border .2s ease;
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(0,0,0,.25)}
+    .btn-primary{background:#0b1f1c;border-color:#1e3a34;color:#b3fff0}
+    .btn-ghost{background:transparent;border-color:#28374f}
+    .btn-light{background:#0f1623;border-color:#1f2a37}
+
+    /* 히어로 */
+    .hero{padding:72px 0 36px;border-bottom:1px solid #101827;background:
+      radial-gradient(1200px 600px at 80% -80%, rgba(76,201,240,.15), transparent 60%);}
+    .hero h1{font-size:42px;line-height:1.15;margin:0 0 10px 0}
+    .hero p{font-size:18px;color:#cfe1ff;margin:6px 0 18px 0}
+    .hero-cta{display:flex;gap:10px;flex-wrap:wrap}
+    .hero .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+    .kpi{padding:14px;border-radius:14px;background:#0f1623;border:1px solid #1f2a37;text-align:center}
+    .kpi b{font-size:20px}
+    .kpi span{display:block;color:#9fb3c8;margin-top:4px;font-size:12px}
+
+    /* 섹션 공통 */
+    section{padding:40px 0}
+    .section-title{font-size:22px;margin:0 0 16px 0}
+    .grid-3{display:grid;gap:14px;grid-template-columns:repeat(1,minmax(0,1fr))}
+    @media(min-width:760px){.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+    .card{background:linear-gradient(180deg,#0f1623,#0d1320 60%);border:1px solid #1f2a37;border-radius:18px;padding:16px}
+    .card h3{margin:6px 0 8px 0;font-size:18px}
+    .muted{color:#9fb3c8}
+
+    /* 절차 */
+    .steps{counter-reset:step}
+    .step{position:relative;padding-left:44px}
+    .step + .step{margin-top:14px}
+    .step::before{
+      counter-increment:step;content:counter(step);
+      position:absolute;left:0;top:0;width:32px;height:32px;border-radius:999px;
+      display:inline-flex;align-items:center;justify-content:center;
+      background:#0b1f1c;border:1px solid #1e3a34;color:#b3fff0;font-weight:700
+    }
+
+    /* 리뷰 미리보기 */
+    .reviews{display:grid;gap:14px;grid-template-columns:repeat(1,minmax(0,1fr))}
+    @media(min-width:760px){.reviews{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    .rev{background:#0f1623;border:1px solid #1f2a37;border-radius:16px;padding:14px}
+    .rev .meta{display:flex;justify-content:space-between;color:#9fb3c8;font-size:12px;margin-bottom:6px}
+    .rev .nick{color:#cfe5ff;font-weight:700}
+    .stars{color:#facc15}
+
+    /* FAQ */
+    .faq .item{border:1px solid #1f2a37;border-radius:14px;background:#0f1623}
+    .faq .q{display:flex;justify-content:space-between;gap:10px;padding:14px;cursor:pointer}
+    .faq .a{display:none;padding:0 14px 14px 14px;color:#cfe1ff}
+    .faq .item.open .a{display:block}
+    .faq .item.open .q{border-bottom:1px solid #1f2a37}
+
+    /* 패널 */
+    .panel{border:1px solid #1f2a37;background:#0c1320;border-radius:18px;padding:16px}
+
+    /* 푸터 */
+    footer{padding:28px 0;border-top:1px solid #0f1623;color:#9fb3c8;font-size:12px}
+    .foot-grid{display:grid;gap:12px;grid-template-columns:1fr;align-items:center}
+    @media(min-width:760px){.foot-grid{grid-template-columns:1fr auto}}
+  </style>
+
+  <!-- 구조화 데이터 -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": "메이플스토리 급처템 최고가 매입",
-    "serviceType": "Game Item Purchasing",
-    "areaServed": "KR",
-    "provider": {"@type": "Organization", "name": "메이플 급처템 다삼"},
-    "brand": {"@type": "Brand", "name": "HAN8246"},
-    "description": "전서버 급처템 85% 이상 최고가 매입, 24시간 빠른 거래, 안전한 정산, 가위값 지원.",
-    "url": "https://maple-fastbuy.vercel.app/"
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "name":"Maple FastBuy",
+    "url":"https://example.com",
+    "sameAs": [],
+    "logo":"https://example.com/og.jpg"
   }
   </script>
 </head>
-
 <body>
-  <header class="container">
-    <nav class="nav">
-      <a class="logo" href="index.html">메이플 급처템 다삼</a>
-      <ul>
-        <li><a href="method.html">거래방법</a></li>
-        <li><a href="reviews.html">후기 게시판</a></li>
-      </ul>
-    </nav>
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="wrap nav">
+      <a class="brand" href="/">
+        <span class="logo"></span><b>Maple FastBuy</b>
+      </a>
+      <nav>
+        <a class="btn btn-ghost" href="/reviews.html">후기 게시판</a>
+        <a class="btn btn-primary" href="#contact">빠른 문의</a>
+      </nav>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="hero">
-      <h1>전서버 급처템 <b>85% 이상</b> 최고가 구매</h1>
-      <p class="sub">365일 24시간 · 빠른 거래 · 안전한 정산 · 가위값 지원 가능</p>
-      <div class="cta">
-        <div class="kakao">카카오톡 아이디: <b>HAN8246</b></div>
-        <button id="copyBtn" aria-label="카카오 아이디 복사">아이디 복사하기</button>
+  <!-- 히어로 -->
+  <div class="wrap hero">
+    <h1>메이플 <span style="color:#90e0ef">급처템</span>,<br/>안전하고 <span style="color:#2dd4bf">빠르게</span> 현금화</h1>
+    <p>실시간 시세 안내 · 가위값 포함 투명 정산 · 24시간 대응(가능 시간 공지)</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#process">거래 절차 보기</a>
+      <a class="btn btn-light" href="/reviews.html">실제 후기 바로 보기</a>
+      <button id="copyBtn" class="btn btn-ghost" data-copy="@fastbuy">연락처 복사</button>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><b>5분 내 응대</b><span>대부분의 문의</span></div>
+      <div class="kpi"><b>친절한 시세안내</b><span>가위값/수수료 투명</span></div>
+      <div class="kpi"><b>안전거래</b><span>후기 게시판 운영</span></div>
+    </div>
+  </div>
+
+  <!-- 왜 FastBuy인가 -->
+  <section class="wrap">
+    <h2 class="section-title">왜 Maple FastBuy인가</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3>합리적인 시세</h3>
+        <p class="muted">시장 상황을 반영한 실거래 기준. 가위값/수수료를 미리 안내하여 받아보실 금액을 예측할 수 있어요.</p>
       </div>
-    </section>
+      <div class="card">
+        <h3>빠른 정산</h3>
+        <p class="muted">확인 즉시 정산 진행. 대기 시에도 예상 시간을 알려드려 답답함이 없어요.</p>
+      </div>
+      <div class="card">
+        <h3>안전 & 신뢰</h3>
+        <p class="muted">직접 운영하는 <b><a href="/reviews.html">후기 게시판</a></b>으로 신뢰를 확인하세요.</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="grid">
-      <article class="card">
-        <h3>왜 우리인가?</h3>
-        <ul>
-          <li>즉시 견적 · 신속 송금</li>
-          <li>안전한 정산 프로세스</li>
-          <li>전서버/전직업 대응</li>
-        </ul>
+  <!-- 거래 절차 -->
+  <section id="process" class="wrap">
+    <h2 class="section-title">거래 절차</h2>
+    <div class="panel">
+      <div class="steps">
+        <div class="step"><b>문의하기</b> — 연락처로 아이템/수량을 알려주세요.</div>
+        <div class="step"><b>시세 안내</b> — 가위값/수수료 포함 예상 금액 안내.</div>
+        <div class="step"><b>안전거래</b> — 합의 후 안전하게 이전/확인.</div>
+        <div class="step"><b>즉시 정산</b> — 확인 완료 즉시 정산 처리.</div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="#contact">지금 문의하기</a>
+        <a class="btn btn-light" href="/reviews.html">후기 더 보기</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 리뷰 미리보기 (정적 카드 3개, 자세한 건 reviews.html) -->
+  <section class="wrap">
+    <h2 class="section-title">이용자 후기</h2>
+    <div class="reviews">
+      <article class="rev">
+        <div class="meta"><span class="nick">@하늘바람</span><span>최근</span></div>
+        <div class="stars">★★★★★</div>
+        <p>야간에도 바로 대응해주셔서 놀랐어요. 가위값도 챙겨주심!</p>
       </article>
-
-      <article class="card">
-        <h3>거래 방법</h3>
-        <p>스크린샷 또는 아이템 정보를 보내주시면 1분 내 견적 드립니다.</p>
-        <a class="btn" href="method.html">자세히 보기</a>
+      <article class="rev">
+        <div class="meta"><span class="nick">@초코우유</span><span>최근</span></div>
+        <div class="stars">★★★★★</div>
+        <p>시세 설명 친절, 가격 납득. 다음에도 이용할게요.</p>
       </article>
-
-      <article class="card">
-        <h3>실제 후기</h3>
-        <p>실시간 후기와 별점 확인하고 직접 남겨보세요.</p>
-        <a class="btn" href="reviews.html">후기 보러가기</a>
+      <article class="rev">
+        <div class="meta"><span class="nick">@메린이</span><span>최근</span></div>
+        <div class="stars">★★★★☆</div>
+        <p>주말이라 10분 대기. 그래도 금방 처리!</p>
       </article>
-    </section>
+    </div>
+    <div style="margin-top:12px">
+      <a class="btn btn-light" href="/reviews.html">후기 게시판으로 이동</a>
+    </div>
+  </section>
 
-    <section class="faq">
-      <h2>자주 묻는 질문(FAQ)</h2>
-      <details>
-        <summary>정산은 얼마나 걸리나요?</summary>
-        <p>거래 확정 후 <b>평균 3분 이내</b>로 정산됩니다.</p>
-      </details>
-      <details>
-        <summary>어떤 아이템이 가능한가요?</summary>
-        <p>무기/방어구/장신구/큐브 등 대부분의 급처템을 다룹니다.</p>
-      </details>
-      <details>
-        <summary>보안은 어떻게 보장되나요?</summary>
-        <p>계정 접근 없이 <b>거래소/교환</b> 방식만 사용합니다.</p>
-      </details>
-    </section>
-  </main>
+  <!-- FAQ -->
+  <section class="wrap">
+    <h2 class="section-title">자주 묻는 질문</h2>
+    <div class="faq">
+      <div class="item">
+        <div class="q"><b>가위값/수수료는 어떻게 되나요?</b><span>＋</span></div>
+        <div class="a">아이템 종류/수량/시세에 따라 달라요. 견적 전에 가위값/수수료를 미리 안내드려요.</div>
+      </div>
+      <div class="item">
+        <div class="q"><b>정산까지 얼마나 걸리나요?</b><span>＋</span></div>
+        <div class="a">보통 확인 즉시 진행됩니다. 대기 시 예상 시간을 먼저 알려드려요.</div>
+      </div>
+      <div class="item">
+        <div class="q"><b>거래 안전은 어떻게 보장하나요?</b><span>＋</span></div>
+        <div class="a">안전 절차를 준수하며, 실제 <a href="/reviews.html">후기 게시판</a>으로 투명성을 유지합니다.</div>
+      </div>
+    </div>
+  </section>
 
-  <footer class="footer">
-    <div class="container">
-      <small>© <span id="year"></span> 메이플 급처템 다삼 · 문의: 카카오톡 <b>HAN8246</b></small>
+  <!-- 연락/CTA -->
+  <section id="contact" class="wrap">
+    <h2 class="section-title">빠르게 문의하기</h2>
+    <div class="panel" style="display:grid;gap:12px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="https://t.me/" target="_blank" rel="noopener">텔레그램 열기</a>
+        <a class="btn btn-light" href="https://discord.com/" target="_blank" rel="noopener">디스코드 열기</a>
+        <button id="copyBtn2" class="btn btn-ghost" data-copy="@fastbuy">연락처 복사</button>
+      </div>
+      <p class="muted">연락처: <code id="contactText">@fastbuy</code> · 원하는 채널로 메시지 주세요.</p>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="wrap foot-grid">
+      <div>© <span id="yy"></span> Maple FastBuy. 모든 권리 보유.</div>
+      <div style="display:flex;gap:10px">
+        <a class="btn btn-ghost" href="/reviews.html">후기 게시판</a>
+        <a class="btn btn-ghost" href="#process">거래 절차</a>
+      </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // 연도
+    document.getElementById('yy').textContent = new Date().getFullYear();
+
+    // FAQ 토글
+    document.querySelectorAll('.faq .item .q').forEach(q=>{
+      q.addEventListener('click', ()=> q.parentElement.classList.toggle('open'));
+    });
+
+    // 연락처 복사
+    function setupCopy(id){
+      const el=document.getElementById(id) || document.getElementById('contactText');
+      const btn = (id==='copyBtn'||id==='copyBtn2') ? document.getElementById(id) : null;
+      const copy = (text)=>{
+        navigator.clipboard?.writeText(text).then(()=>alert('연락처가 복사됐어요! 붙여넣기 하세요.'))
+        .catch(()=>{prompt('복사 실패. 수동으로 복사하세요.', text);});
+      };
+      btn?.addEventListener('click', ()=> copy(btn.dataset.copy || el.textContent));
+    }
+    setupCopy('copyBtn'); setupCopy('copyBtn2');
+
+    // 스무스 스크롤(앵커)
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id=a.getAttribute('href').slice(1);
+        const target=document.getElementById(id);
+        if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth',block:'start'}); }
+      });
+    });
+  </script>
 </body>
 </html>
