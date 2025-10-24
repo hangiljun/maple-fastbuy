@@ -13,6 +13,7 @@
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,Segoe UI,Apple SD Gothic Neo,Apple Color Emoji,Arial,Helvetica,Roboto,"Noto Sans KR",sans-serif;line-height:1.6}
 a{color:inherit;text-decoration:none}
+button{font:inherit}
 .container{max-width:1024px;margin:0 auto;padding:20px}
 
 .site-header{display:flex;justify-content:space-between;align-items:center;gap:16px}
