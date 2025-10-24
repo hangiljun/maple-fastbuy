@@ -1,203 +1,75 @@
-/***** CONFIG *****/
-const STORAGE_KEY = 'mf_reviews_v2'; // 버전업: v2로 키 분리
-const ADMIN_PIN = '8246';
+// 연도
+document.getElementById('year').textContent = new Date().getFullYear();
 
-/***** 공통/유틸 *****/
-const $ = (sel)=>document.querySelector(sel);
-const $$ = (sel)=>document.querySelectorAll(sel);
-const yearEl = $('#year'); if (yearEl) yearEl.textContent = new Date().getFullYear();
-const toastEl = $('#toast');
-
-function toast(msg){
-  if (!toastEl) return alert(msg);
-  toastEl.textContent = msg;
-  toastEl.classList.add('show');
-  setTimeout(()=>toastEl.classList.remove('show'), 1800);
-}
-
-function escapeHtml(s){
-  return (s||'').toString().replace(/[&<>"']/g, c =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
-function stars(n){const r=clamp(parseInt(n||5,10),1,5);return '★'.repeat(r)+'☆'.repeat(5-r);}
-function uid(){return Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-6);}
-
-/***** 저장/불러오기 *****/
-function loadReviews(){
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-  catch { return []; }
-}
-function saveReviews(list){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-}
-
-/***** 상태/DOM *****/
-let adminMode = false;
-const reviewForm   = $('#reviewForm');
-const listEl       = $('#reviews');
-const formMsg      = $('#formMsg');
-const avgEl        = $('#avgRating');
-const cntEl        = $('#countRating');
-const adminStateEl = $('#adminState');
-const adminToolbar = $('#adminToolbar');
-const fileInput    = $('#fileInput');
-
-/***** 렌더링 *****/
-function renderReviews(){
-  const items = loadReviews().sort((a,b)=> new Date(b.ts) - new Date(a.ts));
-
-  // 통계
-  cntEl && (cntEl.textContent = `${items.length}건`);
-  if (!items.length){
-    listEl.innerHTML = '<div class="center-muted card pad">아직 후기가 없습니다. 첫 후기를 남겨주세요! 🎉</div>';
-    avgEl && (avgEl.textContent = '-');
-    return;
-  }
-  const avg = items.reduce((s,r)=> s + (Number(r.rating)||0), 0) / items.length;
-  avgEl && (avgEl.textContent = `${stars(Math.round(avg))} (${avg.toFixed(1)})`);
-
-  // 목록
-  listEl.innerHTML = '';
-  items.forEach(r=>{
-    const dt = new Date(r.ts);
-    const dateStr = `${dt.getFullYear()}.${String(dt.getMonth()+1).padStart(2,'0')}.${String(dt.getDate()).padStart(2,'0')}`;
-
-    const wrap = document.createElement('div');
-    wrap.className = 'review';
-    wrap.innerHTML = `
-      <div class="name">
-        ${escapeHtml(r.name || '익명')}
-        <span class="meta">· ${stars(r.rating)} · ${dateStr}</span>
-        ${adminMode ? `<button class="btn small danger" data-id="${escapeHtml(r.id)}" style="float:right">삭제</button>` : ''}
-      </div>
-      <div class="content">${escapeHtml(r.content || '')}</div>
-    `;
-    listEl.appendChild(wrap);
+// 카카오 아이디 복사
+const copyBtn = document.getElementById('copy-kakao');
+if (copyBtn) {
+  copyBtn.addEventListener('click', async () => {
+    const id = document.getElementById('kakaoId').textContent.trim();
+    try {
+      await navigator.clipboard.writeText(id);
+      showMsg('아이디가 복사되었습니다: ' + id, 'success');
+    } catch (e) {
+      showMsg('복사에 실패했어요. 아이디를 직접 복사해 주세요.', 'error');
+    }
   });
-
-  // 삭제(관리자 모드에서만 활성)
-  if (adminMode){
-    listEl.querySelectorAll('button[data-id]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        const id = btn.getAttribute('data-id');
-        const now = loadReviews();
-        const target = now.find(x=>x.id===id);
-        if (!target) { toast('이미 삭제되었거나 찾을 수 없습니다.'); return; }
-        if (!confirm(`이 후기를 삭제할까요?\n\n"${target.content.slice(0,50)}${target.content.length>50?'…':''}"`)) return;
-        saveReviews(now.filter(x=>x.id!==id)); // ✅ 개별 삭제
-        renderReviews();
-        toast('후기 1건을 삭제했습니다.');
-      });
-    });
-  }
-
-  // 관리자 UI 토글
-  adminStateEl.style.display = adminMode ? 'inline-flex' : 'none';
-  adminToolbar.style.display = adminMode ? 'flex' : 'none';
 }
 
-/***** 폼 제출 *****/
-if (reviewForm){
-  reviewForm.addEventListener('submit', (e)=>{
-    e.preventDefault();
-    formMsg && (formMsg.textContent = '');
+// “지금 문의하기” 버튼 → 문의 섹션으로 스크롤
+const ctaBtn = document.getElementById('cta-inquiry');
+if (ctaBtn) {
+  ctaBtn.addEventListener('click', () => {
+    document.getElementById('contact')?.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+}
 
-    const name    = $('#name').value.trim().slice(0,20) || '익명';
-    const rating  = clamp(parseInt($('#rating').value,10)||5,1,5);
-    const content = $('#content').value.trim().slice(0,1000);
-    if (!content){
-      formMsg ? (formMsg.textContent = '후기를 입력해주세요.') : toast('후기를 입력해주세요.');
+// 후기 게시판 이동(링크가 바뀌면 여기서만 수정)
+const reviewLink = document.getElementById('go-review-board');
+if (reviewLink) {
+  reviewLink.addEventListener('click', (e) => {
+    // 필요 시 라우팅/배포 환경에 맞춰 경로 수정
+    // e.g., e.currentTarget.href = '/reviews/index.html';
+  });
+}
+
+// 빠른 문의 폼 (프론트 유효성 + 성공 메시지만 표시)
+// 실제 전송 로직은 백엔드/구글앱스스크립트 등과 연동 시 이곳에서 fetch 호출
+const form = document.getElementById('quickForm');
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = document.getElementById('formMsg');
+    const data = Object.fromEntries(new FormData(form).entries());
+    if (!data.item || String(data.item).trim().length < 2) {
+      showMsg('아이템/수량을 입력해 주세요.', 'error');
       return;
     }
 
-    const entry = { id: uid(), name, rating, content, ts: new Date().toISOString() };
-    const next = [entry, ...loadReviews()];
-    saveReviews(next);
-
-    reviewForm.reset();
-    formMsg && (formMsg.textContent = '등록되었습니다!'); setTimeout(()=>formMsg.textContent='', 1600);
-    renderReviews();
-    toast('후기 등록 완료');
+    // TODO: 실제 엔드포인트가 있다면 아래 fetch 주석 해제 후 URL 교체
+    /*
+    try {
+      const res = await fetch('https://YOUR_ENDPOINT_HERE', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      showMsg('접수되었습니다! 카카오톡으로도 메시지 주시면 더 빨라요 😊', 'success');
+      form.reset();
+    } catch (err) {
+      showMsg('전송이 지연되고 있어요. 카카오톡(HAN8246)으로 문의해 주세요!', 'error');
+    }
+    */
+    // 임시 성공 메시지 (백엔드 연동 전까지)
+    showMsg('접수되었습니다! 카카오톡(HAN8246)으로 연락 주시면 더 빨라요 😊', 'success');
+    form.reset();
   });
 }
 
-/***** 관리자 모드 (숨김 PIN 8246) *****/
-// 숫자 8246 입력 시 관리자 모드 ON
-let secret = [];
-window.addEventListener('keydown', (e)=>{
-  secret.push(e.key);
-  if (secret.slice(-4).join('') === ADMIN_PIN){
-    const pin = prompt('관리자 PIN을 입력하세요:');
-    if (pin === ADMIN_PIN){
-      adminMode = true;
-      toast('관리자 모드 활성화');
-      renderReviews();
-    }else{
-      toast('PIN이 올바르지 않습니다.');
-    }
-    secret = [];
-  }
-});
-// Ctrl+Alt+A : 관리자 모드 토글
-window.addEventListener('keydown', (e)=>{
-  if (e.ctrlKey && e.altKey && e.key.toLowerCase()==='a'){
-    const pin = prompt('관리자 PIN을 입력하세요:');
-    if (pin === ADMIN_PIN){
-      adminMode = !adminMode;
-      toast(adminMode ? '관리자 모드 ON' : '관리자 모드 OFF');
-      renderReviews();
-    }
-  }
-});
-
-/***** 관리자 툴바: 전체삭제/백업/복원 *****/
-$('#btnClear')?.addEventListener('click', ()=>{
-  if (!adminMode) return;
-  if (confirm('정말 모든 후기를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')){
-    saveReviews([]);
-    renderReviews();
-    toast('모든 후기를 삭제했습니다.');
-  }
-});
-
-$('#btnExport')?.addEventListener('click', ()=>{
-  if (!adminMode) return;
-  const data = JSON.stringify(loadReviews(), null, 2);
-  const blob = new Blob([data], { type:'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `reviews-backup-${new Date().toISOString().slice(0,19)}.json`;
-  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  toast('백업 파일을 내려받았습니다.');
-});
-
-$('#btnImport')?.addEventListener('click', ()=>{
-  if (!adminMode) return;
-  fileInput?.click();
-});
-fileInput?.addEventListener('change', (e)=>{
-  const f = e.target.files?.[0]; if (!f) return;
-  const reader = new FileReader();
-  reader.onload = ()=>{
-    try{
-      const parsed = JSON.parse(String(reader.result||'[]'));
-      if (!Array.isArray(parsed)) throw new Error('형식 오류');
-      saveReviews(parsed.map(r=>({
-        id: r.id || uid(),
-        name: String(r.name||'익명').slice(0,20),
-        rating: clamp(parseInt(r.rating,10)||5,1,5),
-        content: String(r.content||'').slice(0,1000),
-        ts: r.ts || new Date().toISOString()
-      })));
-      renderReviews();
-      toast('복원 완료');
-    }catch(err){
-      toast('복원 실패: 올바른 JSON 파일인지 확인하세요.');
-    }
-  };
-  reader.readAsText(f);
-});
-
-/***** 초기화 *****/
-renderReviews();
+function showMsg(text, type){
+  const el = document.getElementById('formMsg');
+  if (!el) return;
+  el.textContent = text;
+  el.classList.remove('success','error');
+  if (type) el.classList.add(type);
+}
