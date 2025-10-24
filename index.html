@@ -7,7 +7,7 @@
 
   <!-- 기본 SEO -->
   <meta name="description" content="Maple FastBuy — 메이플 급처템을 안전하고 빠르게 거래. 투명한 시세 안내, 빠른 정산, 후기 게시판 운영." />
-  <link rel="canonical" href="/" />
+  <link rel="canonical" href="https://maple-fastbuy-mub2.vercel.app/" />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b0f14" />
 
@@ -15,9 +15,10 @@
   <meta property="og:title" content="Maple FastBuy | 메이플 급처템 빠른 거래">
   <meta property="og:description" content="안전하고 빠른 거래. 후기 게시판으로 신뢰 확인!">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="/">
-  <meta property="og:image" content="/og.jpg">
+  <meta property="og:url" content="https://maple-fastbuy-mub2.vercel.app/">
+  <meta property="og:image" content="https://maple-fastbuy-mub2.vercel.app/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://maple-fastbuy-mub2.vercel.app/og.jpg">
 
   <link rel="icon" href="/favicon.ico">
 
@@ -26,7 +27,7 @@
       --bg:#0b0f14; --panel:#111821; --muted:#6b7a90; --text:#e9eef5; --accent:#4cc9f0; --accent-2:#90e0ef;
       --ok:#2dd4bf; --warn:#f59e0b; --danger:#ef4444; --ring:rgba(76,201,240,.35);
       --radius:18px;
-      --kakao:#FEE500; --kakao-text:#191600; /* 카카오 버튼 */
+      --kakao:#FEE500; --kakao-text:#191600;
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,AppleSDGothicNeo,Pretendard,Inter,Arial}
@@ -65,17 +66,14 @@
     .kpi b{font-size:20px}
     .kpi span{display:block;color:#9fb3c8;margin-top:4px;font-size:12px}
 
-    /* 섹션 공통 */
     section{padding:40px 0}
     .section-title{font-size:22px;margin:0 0 16px 0}
     .grid-3{display:grid;gap:14px;grid-template-columns:repeat(1,minmax(0,1fr))}
     @media(min-width:760px){.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
 
     .card{background:linear-gradient(180deg,#0f1623,#0d1320 60%);border:1px solid #1f2a37;border-radius:18px;padding:16px}
-    .card h3{margin:6px 0 8px 0;font-size:18px}
     .muted{color:#9fb3c8}
 
-    /* 절차 */
     .steps{counter-reset:step}
     .step{position:relative;padding-left:44px}
     .step + .step{margin-top:14px}
@@ -86,70 +84,33 @@
       background:#0b1f1c;border:1px solid #1e3a34;color:#b3fff0;font-weight:700
     }
 
-    /* 리뷰 미리보기 */
     .reviews{display:grid;gap:14px;grid-template-columns:repeat(1,minmax(0,1fr))}
     @media(min-width:760px){.reviews{grid-template-columns:repeat(3,minmax(0,1fr))}}
     .rev{background:#0f1623;border:1px solid #1f2a37;border-radius:16px;padding:14px}
     .rev .meta{display:flex;justify-content:space-between;color:#9fb3c8;font-size:12px;margin-bottom:6px}
     .rev .nick{color:#cfe5ff;font-weight:700}
-    .stars{color:#facc15}
 
-    /* FAQ */
-    .faq .item{border:1px solid #1f2a37;border-radius:14px;background:#0f1623}
-    .faq .q{display:flex;justify-content:space-between;gap:10px;padding:14px;cursor:pointer}
-    .faq .a{display:none;padding:0 14px 14px 14px;color:#cfe1ff}
-    .faq .item.open .a{display:block}
-    .faq .item.open .q{border-bottom:1px solid #1f2a37}
-
-    /* 패널 */
     .panel{border:1px solid #1f2a37;background:#0c1320;border-radius:18px;padding:16px}
 
-    /* 카카오 아이디: 본문 글꼴(정자)로 보이게 */
-    .kakao-id{
-      font-family: inherit;
-      font-style: normal;
-      font-weight: 700;
-      letter-spacing: .2px;
-      background: transparent;
-      padding: 0;
-      border: 0;
-      color: var(--text);
-    }
+    .kakao-id{font-family:inherit;font-weight:700;letter-spacing:.2px;color:var(--text)}
 
-    /* 푸터 */
     footer{padding:28px 0;border-top:1px solid #0f1623;color:#9fb3c8;font-size:12px}
-    .foot-grid{display:grid;gap:12px;grid-template-columns:1fr;align-items:center}
+    .foot-grid{display:grid;gap:12px;grid-template-columns:1fr}
     @media(min-width:760px){.foot-grid{grid-template-columns:1fr auto}}
   </style>
-
-  <!-- 구조화 데이터 -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"Maple FastBuy",
-    "url":"https://example.com",
-    "sameAs": [],
-    "logo":"https://example.com/og.jpg"
-  }
-  </script>
 </head>
+
 <body>
-  <!-- 헤더 -->
   <header class="header">
     <div class="wrap nav">
-      <a class="brand" href="/">
-        <span class="logo"></span><b>Maple FastBuy</b>
-      </a>
+      <a class="brand" href="/"><span class="logo"></span><b>Maple FastBuy</b></a>
       <nav>
         <a class="btn btn-ghost" href="/reviews.html">후기 게시판</a>
-        <!-- 상단 빠른 문의: 카카오 URL + 노란 버튼 -->
-        <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank" rel="noopener">빠른 문의</a>
+        <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank">빠른 문의</a>
       </nav>
     </div>
   </header>
 
-  <!-- 히어로 -->
   <div class="wrap hero">
     <h1>메이플 급처템,<br/>안전하고 빠르게 거래</h1>
     <p>실시간 시세 안내 · 가위값 포함 투명 정산 · 365일 24시간 대응</p>
@@ -157,81 +118,37 @@
       <a class="btn btn-primary" href="#process">거래 절차 보기</a>
       <a class="btn btn-light" href="/reviews.html">실제 후기 바로 보기</a>
     </div>
-
-    <div class="kpis">
-      <div class="kpi"><b>5분 내 응대</b><span>365일 24시간 대기</span></div>
-      <div class="kpi"><b>친절한 시세안내</b><span>경매장 매물 및 시세텝의 85%</span></div>
-      <div class="kpi"><b>안전거래</b><span>365일 무사고, 후기게시판 참조</span></div>
-    </div>
   </div>
 
-  <!-- 왜 FastBuy인가 -->
-  <section class="wrap">
-    <h2 class="section-title">왜 Maple FastBuy인가</h2>
-    <div class="grid-3">
-      <div class="card">
-        <h3>합리적인 가격</h3>
-        <p class="muted">경매장 매물 , 시세텝을 꼼꼼히 확인후 85%가격으로 가격 측정</p>
-      </div>
-      <div class="card">
-        <h3>빠른 정산</h3>
-        <p class="muted">확인 즉시 바로 거래 진행. 5분이내 시세 측정 완료.</p>
-      </div>
-      <div class="card">
-        <h3>안전 & 신뢰</h3>
-        <p class="muted">실제 판매자분들이 작성한 <b><a href="/reviews.html">후기 게시판</a></b>으로 신뢰를 확인하세요.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 거래 절차 -->
   <section id="process" class="wrap">
     <h2 class="section-title">거래 절차</h2>
     <div class="panel">
       <div class="steps">
-        <div class="step"><b>문의하기</b> — 문의 버튼을 누르면 카카오톡으로 자동 연결 됩니다,</div>
-        <div class="step"><b>시세 안내</b> — 경매장시세 확인후  예상 금액 안내.</div>
-        <div class="step"><b>안전거래</b> — 가격 합의 후 안전하게 거래진행.</div>
+        <div class="step"><b>문의하기</b> — 문의 버튼을 누르면 카카오톡으로 자동 연결 됩니다.</div>
+        <div class="step"><b>시세 안내</b> — 경매장 시세 확인 후 예상 금액 안내.</div>
+        <div class="step"><b>안전거래</b> — 가격 합의 후 안전하게 거래 진행.</div>
         <div class="step"><b>즉시 정산</b> — 확인 완료 즉시 정산 처리.</div>
       </div>
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-        <!-- 거래절차의 지금 문의하기: 카카오 URL + 노란 버튼 -->
-        <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank" rel="noopener">지금 문의하기</a>
+        <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank">지금 문의하기</a>
         <a class="btn btn-light" href="/reviews.html">후기 더 보기</a>
       </div>
     </div>
   </section>
 
-  <!-- 이용자 후기 (Firestore에서 최신 3개 가져와 렌더링) -->
-  <section class="wrap">
-    <h2 class="section-title">이용자 후기</h2>
-    <div id="reviewsPreview" class="reviews">
-      <!-- 비활성/로딩 실패 대비 플레이스홀더 -->
-      <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
-      <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
-      <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
-    </div>
-    <div style="margin-top:12px">
-      <a class="btn btn-light" href="/reviews.html">후기 게시판으로 이동</a>
-    </div>
-  </section>
-
-  <!-- 빠르게 문의하기 (카카오톡 전용) -->
   <section id="contact" class="wrap">
     <h2 class="section-title">빠르게 문의하기</h2>
-    <div class="panel" style="display:grid;gap:12px">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+    <div class="panel">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
         <span class="muted">카카오톡 아이디:</span>
-        <!-- ✅ 정자(본문 글꼴)로 보이도록 span.kakao-id 사용 -->
         <span class="kakao-id" id="kakaoId">HAN8246</span>
         <button id="copyKakao" class="btn btn-ghost">아이디 복사</button>
-        <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank" rel="noopener">카카오톡으로 문의</a>
+        <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank">카카오톡으로 문의</a>
       </div>
-      <p class="muted">오픈채팅 또는 아이디로 메시지 주세요. 365일 24시간 응대 가능 합니다.</p>
+      <p class="muted">오픈채팅 또는 아이디로 메시지 주세요. 365일 24시간 응대 가능합니다.</p>
     </div>
   </section>
 
-  <!-- 푸터 -->
   <footer>
     <div class="wrap foot-grid">
       <div>© <span id="yy"></span> Maple FastBuy. 모든 권리 보유.</div>
@@ -242,72 +159,13 @@
     </div>
   </footer>
 
-  <!-- Firebase (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
   <script>
-    // Firebase 설정
-    const firebaseConfig = {
-      apiKey: "AIzaSyBFI2xBn2STV3J3RZ0daa-Vu1pu_eL_wok",
-      authDomain: "maple-fastbuy.firebaseapp.com",
-      projectId: "maple-fastbuy",
-      storageBucket: "maple-fastbuy.firebasestorage.app",
-      messagingSenderId: "159863829103",
-      appId: "1:159863829103:web:9d5301dbb943bd1f99d39a",
-      measurementId: "G-R12SVPXPRC"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const reviewsCol = db.collection("reviews_mfb");
-
-    // 연도
     document.getElementById('yy').textContent = new Date().getFullYear();
-
-    // 카카오톡 아이디 복사
     document.getElementById('copyKakao').addEventListener('click', ()=>{
-      const id = document.getElementById('kakaoId').textContent.trim();
-      navigator.clipboard?.writeText(id)
-        .then(()=>alert('카카오톡 아이디가 복사되었습니다. 붙여넣기 해주세요!'))
-        .catch(()=>{ prompt('복사 실패. 아래 아이디를 복사해주세요.', id); });
-    });
-
-    // 스무스 스크롤(앵커)
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', e=>{
-        const id=a.getAttribute('href').slice(1);
-        const target=document.getElementById(id);
-        if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth',block:'start'}); }
-      });
-    });
-
-    // 메인에 Firestore 최신 후기 3개 연동
-    const $preview = document.getElementById('reviewsPreview');
-    const esc = s => (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;","<": "&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
-    const stars = n => "★".repeat(n||5)+"☆".repeat(Math.max(0,5-(n||5)));
-    const fmt = ts => ts?.toDate ? ts.toDate() : new Date(ts||Date.now());
-
-    reviewsCol.orderBy("createdAt","desc").limit(3).onSnapshot(snap=>{
-      const items = snap.docs.map(d=>({ id:d.id, ...d.data() }));
-      if(!items.length){
-        $preview.innerHTML = `
-          <article class="rev"><div class="meta"><span class="nick">아직 후기가 없어요</span><span>&nbsp;</span></div><p class="muted">첫 후기를 남겨보세요!</p></article>
-        `;
-        return;
-      }
-      $preview.innerHTML = items.map(x=>`
-        <article class="rev">
-          <div class="meta"><span class="nick">@${esc(x.nickname||"익명")}</span><span>${fmt(x.createdAt).toLocaleDateString("ko-KR")}</span></div>
-          <div class="stars">${stars(x.rating||5)}</div>
-          ${x.title? `<p style="margin:.35rem 0 .15rem 0"><b>${esc(x.title)}</b></p>` : ``}
-          <p>${esc(x.content||"")}</p>
-        </article>
-      `).join("");
-    }, err=>{
-      console.error(err);
-      $preview.innerHTML = `
-        <article class="rev"><div class="meta"><span class="nick">불러오기 실패</span><span>&nbsp;</span></div><p class="muted">후기 로딩에 문제가 있습니다. 잠시 후 다시 시도해주세요.</p></article>
-      `;
+      const id=document.getElementById('kakaoId').textContent.trim();
+      navigator.clipboard.writeText(id)
+      .then(()=>alert('카카오톡 아이디가 복사되었습니다. 붙여넣기 해주세요!'))
+      .catch(()=>prompt('복사 실패. 아래 아이디를 복사해주세요.', id));
     });
   </script>
 </body>
