@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://<your-vercel-domain>/sitemap.xml
+
+Sitemap: https://maple-fastbuy.vercel.app/sitemap.xml
