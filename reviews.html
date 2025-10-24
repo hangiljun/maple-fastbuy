@@ -12,49 +12,70 @@
 
   <style>
     :root{
-      --bg:#0b0f14; --panel:#111821; --muted:#6b7a90; --text:#e9eef5; --accent:#4cc9f0;
+      --bg:#0b0f14; --panel:#111821; --muted:#6b7a90; --text:#e9eef5; --accent:#4cc9f0; --accent-2:#90e0ef;
       --ok:#2dd4bf; --warn:#f59e0b; --danger:#ef4444; --ring:rgba(76,201,240,.35);
       --radius:18px;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:Pretendard,Inter,Arial,sans-serif}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,AppleSDGothicNeo,"Apple Color Emoji","Segoe UI Emoji",Pretendard,Inter,Arial}
     a{color:var(--accent)}
     .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
     .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-    .title{font-weight:800;font-size:28px}
+    .title{font-weight:800;font-size:28px;letter-spacing:.2px}
+
     /* 툴바 */
     .toolbar{display:grid;grid-template-columns:1fr 140px 140px 120px;gap:10px;margin:16px 0}
     input[type="search"],select{
       width:100%;padding:12px 14px;border-radius:12px;border:1px solid #1f2937;background:#0f1520;color:var(--text);
-      outline:none;
+      outline:none;box-shadow:0 0 0 0 rgba(0,0,0,0);
     }
     input[type="search"]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
-    /* 리스트 */
+
+    /* 카드/리스트 */
     .grid{display:grid;gap:14px;grid-template-columns:repeat(1,minmax(0,1fr))}
     @media(min-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(min-width:980px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
     .card{
       background:linear-gradient(180deg,#0f1623,#0d1320 60%);
-      border:1px solid #1f2a37;border-radius:var(--radius);padding:16px;
+      border:1px solid #1f2a37;border-radius:var(--radius);padding:16px;position:relative;
       box-shadow:0 12px 30px rgba(0,0,0,.35);
     }
-    .meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9fb3c8;margin-bottom:8px}
-    .nick{font-weight:700;color:#b3d7ff}
-    .rating{color:#facc15}
-    .content{white-space:pre-wrap;line-height:1.6;margin-top:6px}
+    .meta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px;color:var(--muted);font-size:12px}
+    .nick{font-weight:700;color:#cfe5ff}
+    .rating{display:flex;gap:2px;color:#facc15}
+    .star{font-size:14px}
+    .content{white-space:pre-wrap;line-height:1.55}
     .tags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
     .tag{font-size:11px;color:#9fb3c8;background:#0c1220;border:1px solid #1c2433;padding:4px 8px;border-radius:999px}
-    .actions{margin-top:12px}
-    .btn{padding:10px 12px;border-radius:10px;border:1px solid #243045;background:#0e1420;color:#dce7f7;cursor:pointer}
-    .btn:hover{opacity:.92}
-    .btn-ok{background:#0b1f1c;border-color:#1e3a34;color:#b3fff0}
-    .btn-danger{background:#1a0a0a;border-color:#3a1212;color:#ffc7c7}
+    .card .actions{margin-top:12px;display:flex;gap:8px}
+
+    /* 버튼 */
+    .btn{
+      padding:10px 12px;border-radius:12px;border:1px solid #223047;background:#0d1522;color:var(--text);
+      cursor:pointer;transition:transform .06s ease,box-shadow .2s ease,border .2s ease;
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(0,0,0,.25)}
     .btn-ghost{background:transparent;border-color:#28374f}
+    .btn-ok{border-color:#1e3a34;background:#0b1f1c;color:#b3fff0}
+    .btn-warn{border-color:#3a2a12;background:#1a1409;color:#ffd699}
+    .btn-danger{border-color:#3a1212;background:#1a0a0a;color:#ffc7c7}
+
+    /* 작성 패널 (예전 스타일 유지) */
     .panel{margin-top:24px;border:1px solid #1f2a37;background:#0c1320;border-radius:var(--radius);padding:16px}
-    .footer{margin:40px 0;color:#6b7a90;font-size:12px;text-align:center}
+    .panel h3{margin:0 0 12px 0;font-size:16px;color:#b6c9e6}
+    .row{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+    .row + .row{margin-top:10px}
+    textarea,input[type="text"],input[type="number"]{
+      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #1f2937;background:#0f1520;color:var(--text);
+      outline:none;
+    }
+    textarea:focus,input[type="text"]:focus,input[type="number"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+    textarea{min-height:110px;resize:vertical}
+
+    .footer{margin:40px 0;color:var(--muted);font-size:12px}
     .admin-bar{display:flex;gap:10px;align-items:center}
     .badge{padding:6px 10px;border-radius:999px;background:#0c1a12;border:1px solid #1b3a2c;color:#a7f3d0;font-size:12px}
-    .pagination{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+    .pagination{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;margin:18px 0}
     .page-btn{padding:8px 10px;border-radius:10px;border:1px solid #263347;background:#0d1522;color:var(--text);cursor:pointer}
     .page-btn.active{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
     [data-nosnippet]{user-select:none}
@@ -66,30 +87,30 @@
       <div class="title">후기 게시판</div>
       <div class="admin-bar" data-nosnippet>
         <span id="adminState" class="badge" style="display:none;">관리자 모드</span>
-        <!-- PIN 입력창 없음(숨김 유지) -->
+        <!-- 관리자 PIN 입력창 제거(숨김 유지) -->
         <button id="btnAdmin" class="btn btn-ghost">관리자 전환</button>
       </div>
     </div>
 
-    <!-- ✅ 후기 작성: 페이지 상단으로 이동 (원래 디자인 유지) -->
+    <!-- ✅ 작성 폼: 페이지 상단 + 예전 디자인 유지 -->
     <div class="panel" data-nosnippet>
       <h3>후기 작성</h3>
-      <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <input id="nickname" type="text" placeholder="닉네임 (필수)">
-        <input id="rating" type="number" min="1" max="5" step="1" value="5" placeholder="별점 (1~5)">
+      <div class="row">
+        <input id="nickname" type="text" placeholder="닉네임 (필수)" />
+        <input id="rating" type="number" min="1" max="5" step="1" value="5" placeholder="별점 1~5" />
       </div>
-      <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
-        <input id="tags" type="text" placeholder="태그 (쉼표로 구분, 예: 빠른거래,가위값)">
-        <input id="title" type="text" placeholder="제목 (선택)">
+      <div class="row">
+        <input id="tags" type="text" placeholder="태그 (쉼표로 구분, 예: 빠른거래,가위값)" />
+        <input id="title" type="text" placeholder="제목 (선택)" />
       </div>
-      <div class="row" style="display:grid;grid-template-columns:3fr 1fr;gap:10px;margin-top:10px;">
+      <div class="row" style="grid-template-columns:3fr 1fr;">
         <textarea id="content" placeholder="후기 내용을 입력해주세요 (필수)"></textarea>
-        <button id="btnAdd" class="btn btn-ok">후기 등록</button>
+        <button id="btnAdd" class="btn btn-ok" style="align-self:start;height:110px">후기 등록</button>
       </div>
     </div>
 
-    <!-- 🔎 목록 컨트롤은 작성 폼 아래로 이동 -->
-    <div class="toolbar" style="margin-top:18px;">
+    <!-- 🔎 검색/정렬 툴바 (폼 아래) -->
+    <div class="toolbar">
       <input id="q" type="search" placeholder="검색: 내용/닉네임/태그" />
       <select id="sort">
         <option value="new">최신순</option>
@@ -102,7 +123,7 @@
         <option value="12">12개씩</option>
         <option value="18">18개씩</option>
       </select>
-      <button id="btnReset" class="btn">필터 초기화</button>
+      <button id="btnReset" class="btn btn-ghost">필터 초기화</button>
     </div>
 
     <!-- ✅ 후기 목록(기록): 페이지 하단 -->
@@ -115,170 +136,215 @@
   </div>
 
   <script>
-    const KEY="mfb_reviews_v2", ADMIN_KEY="mfb_admin_on", ADMIN_PIN="8246";
+    // ===== 상수/스토어 =====
+    const KEY = "mfb_reviews_v2";
+    const ADMIN_KEY = "mfb_admin_on";
+    const ADMIN_PIN = "8246";
 
-    const store={
-      all(){ try{return JSON.parse(localStorage.getItem(KEY))||[];}catch(e){return[];} },
-      save(l){ localStorage.setItem(KEY, JSON.stringify(l)); },
-      upsert(i){ const l=this.all(); const n=l.findIndex(x=>x.id===i.id);
-        if(n>=0) l[n]=i; else l.unshift(i); this.save(l); },
-      remove(id){ this.save(this.all().filter(x=>x.id!==id)); }
+    const store = {
+      all(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } },
+      save(list){ localStorage.setItem(KEY, JSON.stringify(list)); },
+      upsert(item){
+        const list = this.all();
+        const idx = list.findIndex(x => x.id === item.id);
+        if(idx >= 0) list[idx] = item; else list.unshift(item);
+        this.save(list);
+      },
+      remove(id){
+        const list = this.all().filter(x => x.id !== id);
+        this.save(list);
+      },
+      clear(){ localStorage.setItem(KEY, "[]"); },
     };
 
-    const uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
-    const fmtDate=t=>new Date(t).toLocaleString("ko-KR",{hour12:false});
-    const esc=s=>(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+    // ===== 유틸 =====
+    const uid = () => Math.random().toString(36).slice(2)+Date.now().toString(36);
+    const fmtDate = ts => new Date(ts).toLocaleString("ko-KR", { hour12:false });
+    const esc = s => (s||"").replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
 
-    // 초기 더미(비어있을 때만)
+    // ===== 상태 =====
+    let state = { q:"", sort:"new", page:1, pageSize:9, admin: localStorage.getItem(ADMIN_KEY) === "1" };
+
+    // ===== 초기 더미 데이터(없을 때만) =====
     (function seed(){
-      if(store.all().length) return;
-      const now=Date.now();
-      store.save([
-        {id:uid(), title:"빠르게 정산 받았습니다", nickname:"하늘바람", content:"야간에도 바로 대응해주셔서 놀랐어요. 가위값도 챙겨주심!", rating:5, tags:["빠른거래","가위값"], createdAt:now-1000*60*60*20},
-        {id:uid(), title:"합리적인 가격", nickname:"초코우유", content:"시세 설명 친절, 가격 납득. 다음에도 이용할게요.", rating:5, tags:["합리적","친절"], createdAt:now-1000*60*60*60},
-        {id:uid(), title:"살짝 대기 있었음", nickname:"메린이", content:"주말이라 그런지 10분 정도 대기, 그래도 금방 처리!", rating:4, tags:["주말","대기"], createdAt:now-1000*60*60*80},
-      ]);
+      const has = store.all().length>0;
+      if(has) return;
+      const sample = [
+        {id:uid(), title:"빠르게 정산 받았습니다", nickname:"하늘바람", content:"야간에도 바로 대응해주셔서 놀랐어요. 가위값도 챙겨주심!", rating:5, tags:["빠른거래","가위값"], createdAt:Date.now()-1000*60*60*20},
+        {id:uid(), title:"합리적인 가격", nickname:"초코우유", content:"시세 설명 친절, 가격 납득. 다음에도 이용할게요.", rating:5, tags:["합리적","친절"], createdAt:Date.now()-1000*60*60*60},
+        {id:uid(), title:"살짝 대기 있었음", nickname:"메린이", content:"주말이라 그런지 10분 정도 대기, 그래도 금방 처리!", rating:4, tags:["주말","대기"], createdAt:Date.now()-1000*60*60*80},
+      ];
+      store.save(sample);
     })();
 
-    let state={ q:"", sort:"new", page:1, pageSize:9, admin:localStorage.getItem(ADMIN_KEY)==="1" };
+    // ===== DOM =====
+    const $list = document.getElementById("list");
+    const $pagination = document.getElementById("pagination");
+    const $q = document.getElementById("q");
+    const $sort = document.getElementById("sort");
+    const $pageSize = document.getElementById("pageSize");
+    const $btnReset = document.getElementById("btnReset");
+    const $nickname = document.getElementById("nickname");
+    const $rating = document.getElementById("rating");
+    const $tags = document.getElementById("tags");
+    const $title = document.getElementById("title");
+    const $content = document.getElementById("content");
+    const $btnAdd = document.getElementById("btnAdd");
+    const $btnAdmin = document.getElementById("btnAdmin");
+    const $adminState = document.getElementById("adminState");
+    const adminBar = document.querySelector(".admin-bar");
 
-    // 엘리먼트
-    const $list=document.getElementById("list");
-    const $pagination=document.getElementById("pagination");
-    const $q=document.getElementById("q");
-    const $sort=document.getElementById("sort");
-    const $pageSize=document.getElementById("pageSize");
-    const $btnReset=document.getElementById("btnReset");
-    const $nickname=document.getElementById("nickname");
-    const $rating=document.getElementById("rating");
-    const $tags=document.getElementById("tags");
-    const $title=document.getElementById("title");
-    const $content=document.getElementById("content");
-    const $btnAdd=document.getElementById("btnAdd");
-    const $btnAdmin=document.getElementById("btnAdmin");
-    const $adminState=document.getElementById("adminState");
-    const adminBar=document.querySelector(".admin-bar");
-
+    // ===== 렌더링 =====
     function applyAdminUI(){
       $adminState.style.display = state.admin ? "inline-flex" : "none";
     }
 
     function filterSort(list){
-      const q=state.q.trim().toLowerCase();
-      let arr=list.filter(x=>{
+      const q = state.q.trim().toLowerCase();
+      let arr = list.filter(x=>{
         if(!q) return true;
-        const inTags=(x.tags||[]).join(",").toLowerCase().includes(q);
-        return (x.title||"").toLowerCase().includes(q) ||
-               (x.content||"").toLowerCase().includes(q) ||
-               (x.nickname||"").toLowerCase().includes(q) || inTags;
+        const inTags = (x.tags||[]).join(",").toLowerCase().includes(q);
+        return (
+          (x.title||"").toLowerCase().includes(q) ||
+          (x.content||"").toLowerCase().includes(q) ||
+          (x.nickname||"").toLowerCase().includes(q) ||
+          inTags
+        );
       });
+
       arr.sort((a,b)=>{
-        if(state.sort==="new") return b.createdAt-a.createdAt;
-        if(state.sort==="old") return a.createdAt-b.createdAt;
-        if(state.sort==="high") return (b.rating||0)-(a.rating||0);
-        if(state.sort==="low") return (a.rating||0)-(b.rating||0);
+        if(state.sort==="new") return b.createdAt - a.createdAt;
+        if(state.sort==="old") return a.createdAt - b.createdAt;
+        if(state.sort==="high") return (b.rating||0) - (a.rating||0);
+        if(state.sort==="low") return (a.rating||0) - (b.rating||0);
         return 0;
       });
+
       return arr;
     }
 
     function paginate(list){
-      const start=(state.page-1)*state.pageSize;
-      return list.slice(start,start+state.pageSize);
+      const start = (state.page-1)*state.pageSize;
+      return list.slice(start, start+state.pageSize);
     }
 
-    function stars(n){ return "★".repeat(n)+"☆".repeat(Math.max(0,5-n)); }
+    function stars(n){
+      const full = "★".repeat(n);
+      const empty = "☆".repeat(Math.max(0,5-n));
+      return `<span class="star" aria-label="별점 ${n}점">${full}${empty}</span>`;
+    }
 
     function render(){
       applyAdminUI();
-      const all=store.all();
-      const filtered=filterSort(all);
-      const paged=paginate(filtered);
+      const all = store.all();
+      const filtered = filterSort(all);
+      const paged = paginate(filtered);
 
-      $list.innerHTML=paged.map(x=>`
+      $list.innerHTML = paged.map(item=>`
         <article class="card">
-          <div class="meta"><span class="nick">@${esc(x.nickname||"익명")}</span><span>${fmtDate(x.createdAt||Date.now())}</span></div>
-          <div class="rating">${stars(x.rating||5)}</div>
-          ${x.title?`<h4 style="margin:.4rem 0 .2rem 0">${esc(x.title)}</h4>`:""}
-          <div class="content">${esc(x.content||"")}</div>
-          ${(x.tags&&x.tags.length)?`<div class="tags">${x.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`:""}
-          ${state.admin?`<div class="actions" data-nosnippet>
-            <button class="btn btn-danger" data-act="del" data-id="${x.id}">삭제</button>
-          </div>`:""}
+          <div class="meta">
+            <span class="nick">@${esc(item.nickname||"익명")}</span>
+            <span>${fmtDate(item.createdAt||Date.now())}</span>
+          </div>
+          <div class="rating">${stars(item.rating||5)}</div>
+          ${item.title? `<h4 style="margin:.4rem 0 .2rem 0">${esc(item.title)}</h4>`:""}
+          <div class="content">${esc(item.content||"")}</div>
+          ${(item.tags&&item.tags.length)? `<div class="tags">${item.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`:""}
+          <div class="actions" data-nosnippet>
+            ${state.admin ? `
+              <button class="btn btn-danger" data-act="del" data-id="${item.id}">삭제</button>
+            ` : ``}
+          </div>
         </article>
       `).join("");
 
       // 삭제 핸들러
       $list.querySelectorAll("[data-act='del']").forEach(btn=>{
-        btn.onclick=()=>{
-          const id=btn.getAttribute("data-id");
+        btn.addEventListener("click", ()=>{
+          const id = btn.getAttribute("data-id");
           if(confirm("정말 이 후기를 삭제하시겠습니까?")){
             store.remove(id);
-            const totalAfter=filterSort(store.all()).length;
-            const maxPage=Math.max(1,Math.ceil(totalAfter/state.pageSize));
-            if(state.page>maxPage) state.page=maxPage;
+            const totalAfter = filterSort(store.all()).length;
+            const maxPage = Math.max(1, Math.ceil(totalAfter/state.pageSize));
+            if(state.page>maxPage) state.page = maxPage;
             render();
           }
-        };
+        });
       });
 
       // 페이지네이션
-      const total=filtered.length;
-      const maxPage=Math.max(1,Math.ceil(total/state.pageSize));
-      const pages=Array.from({length:maxPage},(_,i)=>i+1);
-      $pagination.innerHTML=pages.map(p=>`
+      const total = filtered.length;
+      const maxPage = Math.max(1, Math.ceil(total/state.pageSize));
+      const pages = Array.from({length:maxPage}, (_,i)=>i+1);
+      $pagination.innerHTML = pages.map(p=>`
         <button class="page-btn ${p===state.page?"active":""}" data-page="${p}">${p}</button>
       `).join("");
       $pagination.querySelectorAll(".page-btn").forEach(b=>{
-        b.onclick=()=>{ state.page=parseInt(b.getAttribute("data-page"),10); render(); window.scrollTo({top:0,behavior:"smooth"}); };
+        b.addEventListener("click", ()=>{
+          state.page = parseInt(b.getAttribute("data-page"),10);
+          render();
+          window.scrollTo({top:0,behavior:"smooth"});
+        });
       });
     }
 
-    // 이벤트 바인딩
-    $q.oninput=()=>{ state.q=$q.value; state.page=1; render(); };
-    $sort.onchange=()=>{ state.sort=$sort.value; state.page=1; render(); };
-    $pageSize.onchange=()=>{ state.pageSize=parseInt($pageSize.value,10); state.page=1; render(); };
-    $btnReset.onclick=()=>{ $q.value=""; $sort.value="new"; $pageSize.value="9"; state.q=""; state.sort="new"; state.pageSize=9; state.page=1; render(); };
+    // ===== 이벤트 =====
+    $q.addEventListener("input", ()=>{ state.q = $q.value; state.page=1; render(); });
+    $sort.addEventListener("change", ()=>{ state.sort = $sort.value; state.page=1; render(); });
+    $pageSize.addEventListener("change", ()=>{ state.pageSize = parseInt($pageSize.value,10); state.page=1; render(); });
+    $btnReset.addEventListener("click", ()=>{
+      $q.value = ""; $sort.value="new"; $pageSize.value="9";
+      state.q=""; state.sort="new"; state.pageSize=9; state.page=1; render();
+    });
 
-    $btnAdd.onclick=()=>{
-      const nickname=$nickname.value.trim();
-      const rating=Math.min(5,Math.max(1,parseInt($rating.value||"5",10)));
-      const tags=$tags.value.split(",").map(s=>s.trim()).filter(Boolean);
-      const title=$title.value.trim();
-      const content=$content.value.trim();
-      if(!nickname || !content){ alert("닉네임과 내용은 필수입니다."); return; }
-      const item={ id:uid(), nickname, title, content, rating, tags, createdAt:Date.now() };
+    $btnAdd.addEventListener("click", ()=>{
+      const nickname = $nickname.value.trim();
+      const rating = Math.min(5,Math.max(1, parseInt($rating.value||"5",10)));
+      const tags = $tags.value.split(",").map(s=>s.trim()).filter(Boolean);
+      const title = $title.value.trim();
+      const content = $content.value.trim();
+      if(!nickname || !content){
+        alert("닉네임과 내용은 필수입니다.");
+        return;
+      }
+      const item = { id:uid(), nickname, title, content, rating, tags, createdAt:Date.now() };
       store.upsert(item);
       // 입력 초기화
       $content.value=""; $title.value=""; $tags.value=""; $rating.value="5";
       render();
-      // 새 글 등록 후 목록 영역으로 스크롤
+      // 목록으로 스크롤
       document.getElementById("list").scrollIntoView({behavior:"smooth", block:"start"});
-    };
+    });
 
-    $btnAdmin.onclick=()=>{
+    $btnAdmin.addEventListener("click", ()=>{
       if(state.admin){
-        state.admin=false; localStorage.setItem(ADMIN_KEY,"0"); render();
+        state.admin = false;
+        localStorage.setItem(ADMIN_KEY,"0");
       }else{
-        const pin=prompt("관리자 PIN 입력");
-        if(pin===ADMIN_PIN){ state.admin=true; localStorage.setItem(ADMIN_KEY,"1"); render(); }
-        else alert("PIN이 올바르지 않습니다.");
+        const pin = prompt("관리자 PIN 입력");
+        if(pin === ADMIN_PIN){
+          state.admin = true;
+          localStorage.setItem(ADMIN_KEY,"1");
+        }else{
+          alert("PIN이 올바르지 않습니다.");
+        }
       }
-    };
+      render();
+    });
 
-    // 관리자 바 기본 숨김 + 단축키로 표시/숨김 (Ctrl + Alt + A)
-    adminBar.style.display="none";
-    document.addEventListener("keydown",e=>{
-      if(e.ctrlKey && e.altKey && e.key.toLowerCase()==="a"){
-        adminBar.style.display = adminBar.style.display==="none" ? "flex" : "none";
+    // ===== 관리자 바: 기본 숨김 + 단축키 토글(Ctrl+Alt+A) =====
+    adminBar.style.display = "none";
+    document.addEventListener("keydown", e=>{
+      if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='a'){
+        adminBar.style.display = adminBar.style.display==='none' ? 'flex' : 'none';
       }
     });
 
-    // 부트
+    // ===== 부트 =====
     (function init(){
-      const usp=new URLSearchParams(location.search);
-      if(usp.get("q")){ state.q=usp.get("q"); $q.value=state.q; }
-      if(usp.get("sort")){ state.sort=usp.get("sort"); $sort.value=state.sort; }
+      const usp = new URLSearchParams(location.search);
+      if(usp.get("q")){ state.q = usp.get("q"); $q.value = state.q; }
+      if(usp.get("sort")){ state.sort = usp.get("sort"); $sort.value = state.sort; }
       render();
     })();
   </script>
