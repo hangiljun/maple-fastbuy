@@ -2,265 +2,51 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>후기 게시판 | Maple FastBuy</title>
-
-  <!-- 기본 SEO -->
-  <meta name="description" content="메이플스토리 급처템 거래 후기 게시판 - Maple FastBuy 이용자들의 실제 후기 모음" />
-  <link rel="canonical" href="/reviews.html" />
-  <meta name="robots" content="index,follow" />
-
-  <style>
-    :root{
-      --bg:#0b0f14; --panel:#111821; --muted:#6b7a90; --text:#e9eef5; --accent:#4cc9f0; --accent-2:#90e0ef;
-      --ok:#2dd4bf; --warn:#f59e0b; --danger:#ef4444; --ring:rgba(76,201,240,.35);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,AppleSDGothicNeo,Pretendard,Inter,Arial}
-    a{color:var(--accent);text-decoration:none}
-    .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
-
-    /* 헤더 */
-    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand a{display:inline-flex;align-items:center;gap:10px;color:#eaf5ff}
-    .logo{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
-    .title{font-weight:800;font-size:28px;letter-spacing:.2px}
-    .nav-actions{display:flex;gap:8px;align-items:center}
-
-    /* 버튼 */
-    .btn{
-      padding:10px 12px;border-radius:12px;border:1px solid #223047;background:#0d1522;color:var(--text);
-      cursor:pointer;transition:transform .06s ease,box-shadow .2s ease,border .2s ease;
-    }
-    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(0,0,0,.25)}
-    .btn-ghost{background:transparent;border-color:#28374f}
-    .btn-ok{border-color:#1e3a34;background:#0b1f1c;color:#b3fff0}
-    .btn-danger{border-color:#3a1212;background:#1a0a0a;color:#ffc7c7}
-
-    /* 툴바 */
-    .toolbar{display:grid;grid-template-columns:1fr 140px 140px 120px;gap:10px;margin:16px 0}
-    input[type="search"],select{
-      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #1f2937;background:#0f1520;color:var(--text);
-      outline:none;box-shadow:0 0 0 0 rgba(0,0,0,0);
-    }
-    input[type="search"]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
-
-    /* 카드/리스트 */
-    .grid{display:grid;gap:14px;grid-template-columns:repeat(1,minmax(0,1fr))}
-    @media(min-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(min-width:980px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-    .card{
-      background:linear-gradient(180deg,#0f1623,#0d1320 60%);
-      border:1px solid #1f2a37;border-radius:var(--radius);padding:16px;position:relative;
-      box-shadow:0 12px 30px rgba(0,0,0,.35);
-    }
-    .meta{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px;color:var(--muted);font-size:12px}
-    .nick{font-weight:700;color:#cfe5ff}
-    .rating{display:flex;gap:2px;color:#facc15}
-    .star{font-size:14px}
-    .content{white-space:pre-wrap;line-height:1.55}
-    .tags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
-    .tag{font-size:11px;color:#9fb3c8;background:#0c1220;border:1px solid #1c2433;padding:4px 8px;border-radius:999px}
-    .card .actions{margin-top:12px;display:flex;gap:8px}
-
-    /* 작성 패널 */
-    .panel{margin-top:24px;border:1px solid #1f2a37;background:#0c1320;border-radius:var(--radius);padding:16px}
-    .panel h3{margin:0 0 12px 0;font-size:16px;color:#b6c9e6}
-    .row{display:grid;gap:10px;grid-template-columns:1fr 1fr}
-    .row + .row{margin-top:10px}
-    textarea,input[type="text"],input[type="number"]{
-      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #1f2937;background:#0f1520;color:var(--text);
-      outline:none;
-    }
-    textarea:focus,input[type="text"]:focus,input[type="number"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
-    textarea{min-height:110px;resize:vertical}
-
-    .footer{margin:40px 0;color:var(--muted);font-size:12px;text-align:center}
-    .admin-bar{display:flex;gap:10px;align-items:center}
-    .badge{padding:6px 10px;border-radius:999px;background:#0c1a12;border:1px solid #1b3a2c;color:#a7f3d0;font-size:12px}
-    .pagination{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;margin:18px 0}
-    .page-btn{padding:8px 10px;border-radius:10px;border:1px solid #263347;background:#0d1522;color:var(--text);cursor:pointer}
-    .page-btn.active{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
-  </style>
+  <meta name="description" content="메이플스토리 급처템 거래 후기 게시판 - Maple FastBuy" />
+  <link rel="canonical" href="https://maple-fastbuy.vercel.app/reviews.html" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <div class="wrap">
-    <div class="header">
-      <div class="brand">
-        <a href="/" aria-label="메인으로">
-          <span class="logo"></span>
-          <strong>Maple FastBuy</strong>
-        </a>
-      </div>
-      <div class="nav-actions">
-        <a class="btn btn-ghost" href="/">← 메인으로</a>
-        <div class="admin-bar" data-nosnippet>
-          <span id="adminState" class="badge" style="display:none;">관리자 모드</span>
-          <button id="btnAdmin" class="btn btn-ghost">관리자 전환</button>
+    <header class="header">
+      <div class="brand">Maple FastBuy</div>
+      <nav class="nav">
+        <a href="/">홈</a>
+        <a aria-current="page" href="/reviews.html">후기</a>
+        <a href="/method.html">거래방법</a>
+      </nav>
+    </header>
+
+    <main>
+      <section>
+        <h1>거래 후기</h1>
+        <div class="grid" id="reviews">
+          <!-- 정적 샘플 -->
+          <div class="card">
+            <p><b>유저A</b> · ★★★★★</p>
+            <p>빠른 정산 감사합니다. 신뢰합니다!</p>
+            <p class="muted">2025-10-01</p>
+          </div>
+          <div class="card">
+            <p><b>유저B</b> · ★★★★★</p>
+            <p>시세 잘 맞춰주시고 대응 빨라요.</p>
+            <p class="muted">2025-10-05</p>
+          </div>
+          <div class="card">
+            <p><b>유저C</b> · ★★★★☆</p>
+            <p>가격 만족합니다. 다음에 또 거래할게요.</p>
+            <p class="muted">2025-10-10</p>
+          </div>
         </div>
-      </div>
-    </div>
+        <p class="muted" style="margin-top:8px">※ 관리자 등록/삭제 기능이 필요하면 Next.js + API로 확장 가능.</p>
+      </section>
+    </main>
 
-    <!-- 작성 폼 -->
-    <div class="panel" data-nosnippet>
-      <h3>후기 작성</h3>
-      <div class="row">
-        <input id="nickname" type="text" placeholder="닉네임 (필수)" />
-        <input id="rating" type="number" min="1" max="5" step="1" value="5" placeholder="별점 1~5" />
-      </div>
-      <div class="row">
-        <input id="tags" type="text" placeholder="태그 (쉼표로 구분, 예: 빠른거래,가위값)" />
-        <input id="title" type="text" placeholder="제목 (선택)" />
-      </div>
-      <div class="row" style="grid-template-columns:3fr 1fr;">
-        <textarea id="content" placeholder="후기 내용을 입력해주세요 (필수)"></textarea>
-        <button id="btnAdd" class="btn btn-ok" style="align-self:start;height:110px">후기 등록</button>
-      </div>
-    </div>
-
-    <!-- 필터/목록 -->
-    <div class="toolbar">
-      <input id="q" type="search" placeholder="검색: 내용/닉네임/태그" />
-      <select id="sort">
-        <option value="new">최신순</option>
-        <option value="old">오래된순</option>
-        <option value="high">별점 높은순</option>
-        <option value="low">별점 낮은순</option>
-      </select>
-      <select id="pageSize">
-        <option value="9">9개씩</option>
-        <option value="12">12개씩</option>
-        <option value="18">18개씩</option>
-      </select>
-      <button id="btnReset" class="btn btn-ghost">필터 초기화</button>
-    </div>
-
-    <div id="list" class="grid"></div>
-    <div id="pagination" class="pagination"></div>
-
-    <div class="footer">
-      ※ 데이터는 <strong>Firebase Firestore</strong>에 저장되어 기기 간 자동 동기화됩니다.
-      <br/>단축키: <strong>길c + 길a + A</strong> → 관리자 바 표시/숨김
-    </div>
+    <footer class="footer">© <span id="y"></span> Maple FastBuy</footer>
   </div>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-  <script>
-    // === Firebase 설정 ===
-    const firebaseConfig = {
-      apiKey: "AIzaSyBFIZxBn2STV3J3RZddaa-Vu1pu_eL_wok",
-      authDomain: "maple-fastbuy.firebaseapp.com",
-      projectId: "maple-fastbuy",
-      storageBucket: "maple-fastbuy.firebasestorage.app",
-      messagingSenderId: "159863829103",
-      appId: "1:159863829103:web:9d5301dbb943db1f99d39a",
-      measurementId: "G-R12SVYKPXC"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const reviewsCol = db.collection("reviews_mfb");
-
-    const ADMIN_PIN = "8246";
-    let state = { q:"", sort:"new", page:1, pageSize:9, admin:false, all:[] };
-
-    const $list = document.getElementById("list");
-    const $pagination = document.getElementById("pagination");
-    const $q = document.getElementById("q");
-    const $sort = document.getElementById("sort");
-    const $pageSize = document.getElementById("pageSize");
-    const $btnReset = document.getElementById("btnReset");
-    const $nickname = document.getElementById("nickname");
-    const $rating = document.getElementById("rating");
-    const $tags = document.getElementById("tags");
-    const $title = document.getElementById("title");
-    const $content = document.getElementById("content");
-    const $btnAdd = document.getElementById("btnAdd");
-    const $btnAdmin = document.getElementById("btnAdmin");
-    const $adminState = document.getElementById("adminState");
-    const adminBar = document.querySelector(".admin-bar");
-
-    const esc = s => (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
-    const fmt = ts => ts?.toDate ? ts.toDate() : new Date(ts||Date.now());
-    const stars = n => "★".repeat(n)+"☆".repeat(Math.max(0,5-n));
-    function applyAdminUI(){ $adminState.style.display = state.admin ? "inline-flex" : "none"; }
-
-    function filterSort(list){
-      const q = state.q.trim().toLowerCase();
-      let arr = list.filter(x=>{
-        if(!q)return true;
-        const tags=(x.tags||[]).join(",").toLowerCase();
-        return (x.title||"").toLowerCase().includes(q)||(x.content||"").toLowerCase().includes(q)||(x.nickname||"").toLowerCase().includes(q)||tags.includes(q);
-      });
-      arr.sort((a,b)=>{
-        if(state.sort==="new")return (b.createdAt?.toMillis?.()??b.createdAt)-(a.createdAt?.toMillis?.()??a.createdAt);
-        if(state.sort==="old")return (a.createdAt?.toMillis?.()??a.createdAt)-(b.createdAt?.toMillis?.()??b.createdAt);
-        if(state.sort==="high")return(b.rating||0)-(a.rating||0);
-        if(state.sort==="low")return(a.rating||0)-(b.rating||0);
-      });
-      return arr;
-    }
-
-    function paginate(list){
-      const start=(state.page-1)*state.pageSize;
-      return list.slice(start,start+state.pageSize);
-    }
-
-    function render(){
-      applyAdminUI();
-      const filtered=filterSort(state.all);
-      const paged=paginate(filtered);
-      $list.innerHTML=paged.map(x=>`
-        <article class="card">
-          <div class="meta"><span class="nick">@${esc(x.nickname||"익명")}</span><span>${fmt(x.createdAt).toLocaleString("ko-KR",{hour12:false})}</span></div>
-          <div class="rating">${stars(x.rating||5)}</div>
-          ${x.title?`<h4 style="margin:.4rem 0 .2rem 0">${esc(x.title)}</h4>`:""}
-          <div class="content">${esc(x.content||"")}</div>
-          ${(x.tags?.length)?`<div class="tags">${x.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`:""}
-          ${state.admin?`<div class="actions"><button class="btn btn-danger" data-del="${x.id}">삭제</button></div>`:""}
-        </article>`).join("");
-
-      document.querySelectorAll("[data-del]").forEach(b=>{
-        b.onclick=async()=>{const id=b.getAttribute("data-del");if(confirm("삭제하시겠습니까?"))await reviewsCol.doc(id).delete();};
-      });
-
-      const total=filtered.length;
-      const maxPage=Math.max(1,Math.ceil(total/state.pageSize));
-      $pagination.innerHTML=Array.from({length:maxPage},(_,i)=>i+1).map(p=>`
-        <button class="page-btn ${p===state.page?"active":""}" data-page="${p}">${p}</button>`).join("");
-      $pagination.querySelectorAll(".page-btn").forEach(b=>{
-        b.onclick=()=>{state.page=parseInt(b.dataset.page);render();window.scrollTo({top:0,behavior:"smooth"});};
-      });
-    }
-
-    reviewsCol.orderBy("createdAt","desc").onSnapshot(snap=>{
-      state.all=snap.docs.map(d=>({id:d.id,...d.data()}));render();
-    });
-
-    $btnAdd.onclick=async()=>{
-      const nickname=$nickname.value.trim();
-      const rating=Math.min(5,Math.max(1,parseInt($rating.value||"5",10)));
-      const tags=$tags.value.split(",").map(s=>s.trim()).filter(Boolean);
-      const title=$title.value.trim();
-      const content=$content.value.trim();
-      if(!nickname||!content)return alert("닉네임과 내용은 필수입니다.");
-      await reviewsCol.add({nickname,title,content,tags,rating,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-      $content.value="";$title.value="";$tags.value="";$rating.value="5";
-    };
-
-    $q.oninput=()=>{state.q=$q.value;state.page=1;render();};
-    $sort.onchange=()=>{state.sort=$sort.value;state.page=1;render();};
-    $pageSize.onchange=()=>{state.pageSize=parseInt($pageSize.value);state.page=1;render();};
-    $btnReset.onclick=()=>{$q.value="";state.q="";state.sort="new";state.pageSize=9;render();};
-
-    $btnAdmin.onclick=()=>{if(state.admin){state.admin=false;render();}else{const pin=prompt("관리자 PIN 입력");if(pin===ADMIN_PIN){state.admin=true;render();}else alert("PIN이 올바르지 않습니다.");}};
-    adminBar.style.display="none";
-    document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.altKey&&e.key.toLowerCase()==="a"){adminBar.style.display=adminBar.style.display==="none"?"flex":"none";}});
-  </script>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
