@@ -3,23 +3,22 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Maple FastBuy | 메이플 급처템 빠른 현금화</title>
+  <title>Maple FastBuy | 메이플 급처템 빠른 거래</title>
 
   <!-- 기본 SEO -->
-  <meta name="description" content="Maple FastBuy — 메이플 급처템을 안전하고 빠르게 현금화. 24시간 대응, 합리적 시세, 가위값/수수료 친절 안내. 후기 게시판으로 신뢰 확인!" />
+  <meta name="description" content="Maple FastBuy — 메이플 급처템을 안전하고 빠르게 거래. 투명한 시세 안내, 빠른 정산, 후기 게시판 운영." />
   <link rel="canonical" href="/" />
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#0b0f14" />
 
   <!-- OG/Twitter -->
-  <meta property="og:title" content="Maple FastBuy | 메이플 급처템 빠른 현금화">
-  <meta property="og:description" content="안전하고 빠른 급처. 후기 게시판으로 신뢰 확인!">
+  <meta property="og:title" content="Maple FastBuy | 메이플 급처템 빠른 거래">
+  <meta property="og:description" content="안전하고 빠른 거래. 후기 게시판으로 신뢰 확인!">
   <meta property="og:type" content="website">
   <meta property="og:url" content="/">
   <meta property="og:image" content="/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- 파비콘 (원하면 /favicon.ico 추가) -->
   <link rel="icon" href="/favicon.ico">
 
   <style>
@@ -136,12 +135,11 @@
 
   <!-- 히어로 -->
   <div class="wrap hero">
-    <h1>메이플 <span style="color:#90e0ef">급처템</span>,<br/>안전하고 <span style="color:#2dd4bf">빠르게</span> 현금화</h1>
+    <h1>메이플 급처템,<br/>안전하고 빠르게 거래</h1>
     <p>실시간 시세 안내 · 가위값 포함 투명 정산 · 24시간 대응(가능 시간 공지)</p>
     <div class="hero-cta">
       <a class="btn btn-primary" href="#process">거래 절차 보기</a>
       <a class="btn btn-light" href="/reviews.html">실제 후기 바로 보기</a>
-      <button id="copyBtn" class="btn btn-ghost" data-copy="@fastbuy">연락처 복사</button>
     </div>
 
     <div class="kpis">
@@ -175,7 +173,7 @@
     <h2 class="section-title">거래 절차</h2>
     <div class="panel">
       <div class="steps">
-        <div class="step"><b>문의하기</b> — 연락처로 아이템/수량을 알려주세요.</div>
+        <div class="step"><b>문의하기</b> — 아이템/수량을 알려주세요.</div>
         <div class="step"><b>시세 안내</b> — 가위값/수수료 포함 예상 금액 안내.</div>
         <div class="step"><b>안전거래</b> — 합의 후 안전하게 이전/확인.</div>
         <div class="step"><b>즉시 정산</b> — 확인 완료 즉시 정산 처리.</div>
@@ -187,7 +185,7 @@
     </div>
   </section>
 
-  <!-- 리뷰 미리보기 (정적 카드 3개, 자세한 건 reviews.html) -->
+  <!-- 리뷰 미리보기 -->
   <section class="wrap">
     <h2 class="section-title">이용자 후기</h2>
     <div class="reviews">
@@ -212,35 +210,17 @@
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section class="wrap">
-    <h2 class="section-title">자주 묻는 질문</h2>
-    <div class="faq">
-      <div class="item">
-        <div class="q"><b>가위값/수수료는 어떻게 되나요?</b><span>＋</span></div>
-        <div class="a">아이템 종류/수량/시세에 따라 달라요. 견적 전에 가위값/수수료를 미리 안내드려요.</div>
-      </div>
-      <div class="item">
-        <div class="q"><b>정산까지 얼마나 걸리나요?</b><span>＋</span></div>
-        <div class="a">보통 확인 즉시 진행됩니다. 대기 시 예상 시간을 먼저 알려드려요.</div>
-      </div>
-      <div class="item">
-        <div class="q"><b>거래 안전은 어떻게 보장하나요?</b><span>＋</span></div>
-        <div class="a">안전 절차를 준수하며, 실제 <a href="/reviews.html">후기 게시판</a>으로 투명성을 유지합니다.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 연락/CTA -->
+  <!-- 빠르게 문의하기 (카카오톡 전용으로 변경) -->
   <section id="contact" class="wrap">
     <h2 class="section-title">빠르게 문의하기</h2>
     <div class="panel" style="display:grid;gap:12px">
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn btn-primary" href="https://t.me/" target="_blank" rel="noopener">텔레그램 열기</a>
-        <a class="btn btn-light" href="https://discord.com/" target="_blank" rel="noopener">디스코드 열기</a>
-        <button id="copyBtn2" class="btn btn-ghost" data-copy="@fastbuy">연락처 복사</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span class="muted">카카오톡 아이디:</span>
+        <code id="kakaoId">HAN8246</code>
+        <button id="copyKakao" class="btn btn-ghost">아이디 복사</button>
+        <a class="btn btn-primary" href="https://open.kakao.com/o/sKg86b7f" target="_blank" rel="noopener">카카오톡으로 문의</a>
       </div>
-      <p class="muted">연락처: <code id="contactText">@fastbuy</code> · 원하는 채널로 메시지 주세요.</p>
+      <p class="muted">오픈채팅 또는 아이디로 메시지 주세요. 가능한 시간엔 즉시 응대합니다.</p>
     </div>
   </section>
 
@@ -264,17 +244,13 @@
       q.addEventListener('click', ()=> q.parentElement.classList.toggle('open'));
     });
 
-    // 연락처 복사
-    function setupCopy(id){
-      const el=document.getElementById(id) || document.getElementById('contactText');
-      const btn = (id==='copyBtn'||id==='copyBtn2') ? document.getElementById(id) : null;
-      const copy = (text)=>{
-        navigator.clipboard?.writeText(text).then(()=>alert('연락처가 복사됐어요! 붙여넣기 하세요.'))
-        .catch(()=>{prompt('복사 실패. 수동으로 복사하세요.', text);});
-      };
-      btn?.addEventListener('click', ()=> copy(btn.dataset.copy || el.textContent));
-    }
-    setupCopy('copyBtn'); setupCopy('copyBtn2');
+    // 카카오톡 아이디 복사
+    document.getElementById('copyKakao').addEventListener('click', ()=>{
+      const id = document.getElementById('kakaoId').textContent.trim();
+      navigator.clipboard?.writeText(id)
+        .then(()=>alert('카카오톡 아이디가 복사되었습니다. 붙여넣기 해주세요!'))
+        .catch(()=>{ prompt('복사 실패. 아래 아이디를 복사해주세요.', id); });
+    });
 
     // 스무스 스크롤(앵커)
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
