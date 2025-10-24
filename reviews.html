@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>후기 게시판 | Maple FastBuy</title>
 
-  <!-- 기본 SEO: 기존 메인 SEO는 그대로 유지. 여기서는 최소 메타만 -->
+  <!-- 기본 SEO -->
   <meta name="description" content="메이플스토리 급처템 거래 후기 게시판 - Maple FastBuy 이용자들의 실제 후기 모음" />
   <link rel="canonical" href="/reviews.html" />
   <meta name="robots" content="index,follow" />
@@ -69,7 +69,6 @@
     .pagination{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;margin:18px 0}
     .page-btn{padding:8px 10px;border-radius:10px;border:1px solid #263347;background:#0d1522;color:var(--text);cursor:pointer}
     .page-btn.active{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
-    /* 검색 노출 방지 영역 */
     [data-nosnippet]{user-select:none}
   </style>
 </head>
@@ -125,10 +124,9 @@
   </div>
 
   <script>
-    // ====== 간단한 저장소 래퍼 ======
     const KEY = "mfb_reviews_v2";
     const ADMIN_KEY = "mfb_admin_on";
-    const ADMIN_PIN = "8246"; // 필요 시 원하는 값으로 변경 가능. (클라이언트 전용)
+    const ADMIN_PIN = "8246";
 
     const store = {
       all(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } },
@@ -146,11 +144,9 @@
       clear(){ localStorage.setItem(KEY, "[]"); },
     };
 
-    // ====== 유틸 ======
     const uid = () => Math.random().toString(36).slice(2)+Date.now().toString(36);
     const fmtDate = ts => new Date(ts).toLocaleString("ko-KR", { hour12:false });
 
-    // ====== 상태 ======
     let state = {
       q: "",
       sort: "new",
@@ -159,10 +155,8 @@
       admin: localStorage.getItem(ADMIN_KEY) === "1",
     };
 
-    // ====== 초기 더미 데이터(없을 때만) ======
     (function seed(){
-      const has = store.all().length>0;
-      if(has) return;
+      if(store.all().length>0) return;
       const sample = [
         {id:uid(), title:"빠르게 정산 받았습니다", nickname:"하늘바람", content:"야간에도 바로 대응해주셔서 놀랐어요. 가위값도 챙겨주심!", rating:5, tags:["빠른거래","가위값"], createdAt:Date.now()-1000*60*60*20},
         {id:uid(), title:"합리적인 가격", nickname:"초코우유", content:"시세 설명 친절, 가격 납득. 다음에도 이용할게요.", rating:5, tags:["합리적","친절"], createdAt:Date.now()-1000*60*60*60},
@@ -171,7 +165,6 @@
       localStorage.setItem(KEY, JSON.stringify(sample));
     })();
 
-    // ====== 렌더 ======
     const $list = document.getElementById("list");
     const $pagination = document.getElementById("pagination");
     const $q = document.getElementById("q");
@@ -190,11 +183,9 @@
 
     function applyAdminUI(){
       $adminState.style.display = state.admin ? "inline-flex" : "none";
-      // 관리자 전용 버튼은 렌더 시 조건부로 붙습니다.
     }
 
     function filterSort(list){
-      // 검색
       const q = state.q.trim().toLowerCase();
       let arr = list.filter(x=>{
         if(!q) return true;
@@ -206,8 +197,6 @@
           inTags
         );
       });
-
-      // 정렬
       arr.sort((a,b)=>{
         if(state.sort==="new") return b.createdAt - a.createdAt;
         if(state.sort==="old") return a.createdAt - b.createdAt;
@@ -215,7 +204,6 @@
         if(state.sort==="low") return (a.rating||0) - (b.rating||0);
         return 0;
       });
-
       return arr;
     }
 
@@ -227,13 +215,12 @@
     function stars(n){
       const full = "★".repeat(n);
       const empty = "☆".repeat(Math.max(0,5-n));
-      return `<span class="star" aria-label="별점 ${n}점">${full}${empty}</span>`;
+      return `<span class="star">${full}${empty}</span>`;
     }
 
     function editItem(item){
-      // 간단 편집: 모달 대신 prompt로 구현 (디자인 단순화)
-      const newTitle = prompt("제목을 수정하세요", item.title||"") ?? item.title;
-      const newContent = prompt("내용을 수정하세요", item.content||"") ?? item.content;
+      const newTitle = prompt("제목 수정", item.title||"") ?? item.title;
+      const newContent = prompt("내용 수정", item.content||"") ?? item.content;
       const newRating = parseInt(prompt("별점(1~5)", item.rating||5) ?? item.rating, 10);
       const newTags = (prompt("태그(쉼표로 구분)", (item.tags||[]).join(",")) ?? (item.tags||[]).join(","))
         .split(",").map(s=>s.trim()).filter(Boolean);
@@ -251,9 +238,7 @@
       const filtered = filterSort(all);
       const paged = paginate(filtered);
 
-      // 목록
-      $list.innerHTML = paged.map(item=>{
-        return `
+      $list.innerHTML = paged.map(item=>`
         <article class="card">
           <div class="meta">
             <span class="nick">@${item.nickname||"익명"}</span>
@@ -269,12 +254,11 @@
               <button class="btn btn-danger" data-act="del" data-id="${item.id}">삭제</button>
             ` : ``}
           </div>
-        </article>`;
-      }).join("");
+        </article>
+      `).join("");
 
-      // 삭제/수정 이벤트 위임
       $list.querySelectorAll("[data-act]").forEach(btn=>{
-        btn.addEventListener("click", (e)=>{
+        btn.addEventListener("click", e=>{
           const id = e.currentTarget.getAttribute("data-id");
           const act = e.currentTarget.getAttribute("data-act");
           const list = store.all();
@@ -282,9 +266,8 @@
           if(!item) return;
 
           if(act==="del"){
-            if(confirm("정말 이 후기를 삭제하시겠어요?")){
+            if(confirm("정말 삭제하시겠습니까?")){
               store.remove(id);
-              // 현재 페이지가 비면 한 페이지 앞당김
               const totalAfter = filterSort(store.all()).length;
               const maxPage = Math.max(1, Math.ceil(totalAfter/state.pageSize));
               if(state.page>maxPage) state.page = maxPage;
@@ -296,7 +279,6 @@
         });
       });
 
-      // 페이지네이션
       const total = filtered.length;
       const maxPage = Math.max(1, Math.ceil(total/state.pageSize));
       const pages = Array.from({length:maxPage}, (_,i)=>i+1);
@@ -304,7 +286,7 @@
         <button class="page-btn ${p===state.page?"active":""}" data-page="${p}">${p}</button>
       `).join("");
       $pagination.querySelectorAll(".page-btn").forEach(b=>{
-        b.addEventListener("click", (e)=>{
+        b.addEventListener("click", e=>{
           state.page = parseInt(e.currentTarget.getAttribute("data-page"),10);
           render();
           window.scrollTo({top:0,behavior:"smooth"});
@@ -312,62 +294,8 @@
       });
     }
 
-    // ====== 이벤트 바인딩 ======
-    $q.addEventListener("input", ()=>{ state.q = $q.value; state.page=1; render(); });
-    $sort.addEventListener("change", ()=>{ state.sort = $sort.value; state.page=1; render(); });
-    $pageSize.addEventListener("change", ()=>{ state.pageSize = parseInt($pageSize.value,10); state.page=1; render(); });
+    $q.addEventListener("input", ()=>{ state.q=$q.value; state.page=1; render(); });
+    $sort.addEventListener("change", ()=>{ state.sort=$sort.value; state.page=1; render(); });
+    $pageSize.addEventListener("change", ()=>{ state.pageSize=parseInt($pageSize.value,10); state.page=1; render(); });
     $btnReset.addEventListener("click", ()=>{
-      $q.value = ""; $sort.value="new"; $pageSize.value="9";
-      state.q=""; state.sort="new"; state.pageSize=9; state.page=1; render();
-    });
-
-    $btnAdd.addEventListener("click", ()=>{
-      const nickname = $nickname.value.trim();
-      const rating = Math.min(5,Math.max(1, parseInt($rating.value||"5",10)));
-      const tags = $tags.value.split(",").map(s=>s.trim()).filter(Boolean);
-      const title = $title.value.trim();
-      const content = $content.value.trim();
-      if(!nickname || !content){
-        alert("닉네임과 내용은 필수입니다.");
-        return;
-      }
-      const item = { id:uid(), nickname, title, content, rating, tags, createdAt:Date.now() };
-      store.upsert(item);
-      // 입력창 초기화
-      $content.value=""; $title.value=""; $tags.value=""; $rating.value="5";
-      render();
-    });
-
-    $btnAdmin.addEventListener("click", ()=>{
-      if(state.admin){
-        state.admin = false;
-        localStorage.setItem(ADMIN_KEY,"0");
-      }else{
-        const pin = $adminPin.value.trim();
-        if(pin === ADMIN_PIN){
-          state.admin = true;
-          localStorage.setItem(ADMIN_KEY,"1");
-        }else{
-          alert("PIN이 올바르지 않습니다.");
-        }
-      }
-      render();
-    });
-
-    function escapeHtml(s){
-      return (s||"").replace(/[&<>"']/g, m=>({
-        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-      }[m]));
-    }
-
-    // ====== 부트 ======
-    (function init(){
-      // URL 파라미터로 검색/정렬을 공유할 수 있게(선택)
-      const usp = new URLSearchParams(location.search);
-      if(usp.get("q")){ state.q = usp.get("q"); $q.value = state.q; }
-      if(usp.get("sort")){ state.sort = usp.get("sort"); $sort.value = state.sort; }
-      render();
-    })();
-  </script>
-</body>
-</html>
+      $q.value=""; $sort.value="new"; $page
