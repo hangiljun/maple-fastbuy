@@ -18,10 +18,24 @@
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,AppleSDGothicNeo,"Apple Color Emoji","Segoe UI Emoji",Pretendard,Inter,Arial}
-    a{color:var(--accent)}
+    a{color:var(--accent);text-decoration:none}
     .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
+
+    /* 헤더 */
     .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand a{display:inline-flex;align-items:center;gap:10px;color:#eaf5ff}
+    .logo{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
     .title{font-weight:800;font-size:28px;letter-spacing:.2px}
+    .nav-actions{display:flex;gap:8px;align-items:center}
+    .btn{
+      padding:10px 12px;border-radius:12px;border:1px solid #223047;background:#0d1522;color:var(--text);
+      cursor:pointer;transition:transform .06s ease,box-shadow .2s ease,border .2s ease;
+    }
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(0,0,0,.25)}
+    .btn-ghost{background:transparent;border-color:#28374f}
+    .btn-ok{border-color:#1e3a34;background:#0b1f1c;color:#b3fff0}
+    .btn-danger{border-color:#3a1212;background:#1a0a0a;color:#ffc7c7}
 
     /* 툴바 */
     .toolbar{display:grid;grid-template-columns:1fr 140px 140px 120px;gap:10px;margin:16px 0}
@@ -49,18 +63,7 @@
     .tag{font-size:11px;color:#9fb3c8;background:#0c1220;border:1px solid #1c2433;padding:4px 8px;border-radius:999px}
     .card .actions{margin-top:12px;display:flex;gap:8px}
 
-    /* 버튼 */
-    .btn{
-      padding:10px 12px;border-radius:12px;border:1px solid #223047;background:#0d1522;color:var(--text);
-      cursor:pointer;transition:transform .06s ease,box-shadow .2s ease,border .2s ease;
-    }
-    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(0,0,0,.25)}
-    .btn-ghost{background:transparent;border-color:#28374f}
-    .btn-ok{border-color:#1e3a34;background:#0b1f1c;color:#b3fff0}
-    .btn-warn{border-color:#3a2a12;background:#1a1409;color:#ffd699}
-    .btn-danger{border-color:#3a1212;background:#1a0a0a;color:#ffc7c7}
-
-    /* 작성 패널 (예전 스타일 유지) */
+    /* 작성 패널 (초안 디자인 유지) */
     .panel{margin-top:24px;border:1px solid #1f2a37;background:#0c1320;border-radius:var(--radius);padding:16px}
     .panel h3{margin:0 0 12px 0;font-size:16px;color:#b6c9e6}
     .row{display:grid;gap:10px;grid-template-columns:1fr 1fr}
@@ -72,7 +75,7 @@
     textarea:focus,input[type="text"]:focus,input[type="number"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
     textarea{min-height:110px;resize:vertical}
 
-    .footer{margin:40px 0;color:var(--muted);font-size:12px}
+    .footer{margin:40px 0;color:var(--muted);font-size:12px;text-align:center}
     .admin-bar{display:flex;gap:10px;align-items:center}
     .badge{padding:6px 10px;border-radius:999px;background:#0c1a12;border:1px solid #1b3a2c;color:#a7f3d0;font-size:12px}
     .pagination{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;margin:18px 0}
@@ -84,15 +87,25 @@
 <body>
   <div class="wrap">
     <div class="header">
-      <div class="title">후기 게시판</div>
-      <div class="admin-bar" data-nosnippet>
-        <span id="adminState" class="badge" style="display:none;">관리자 모드</span>
-        <!-- 관리자 PIN 입력창 제거(숨김 유지) -->
-        <button id="btnAdmin" class="btn btn-ghost">관리자 전환</button>
+      <div class="brand">
+        <!-- 메인으로 -->
+        <a href="/" aria-label="메인으로">
+          <span class="logo"></span>
+          <strong>Maple FastBuy</strong>
+        </a>
+      </div>
+      <div class="nav-actions">
+        <!-- 메인으로 돌아가기 버튼 -->
+        <a class="btn btn-ghost" href="/">← 메인으로</a>
+        <div class="admin-bar" data-nosnippet>
+          <span id="adminState" class="badge" style="display:none;">관리자 모드</span>
+          <!-- 관리자 PIN 입력창은 숨김(버튼만) -->
+          <button id="btnAdmin" class="btn btn-ghost">관리자 전환</button>
+        </div>
       </div>
     </div>
 
-    <!-- ✅ 작성 폼: 페이지 상단 + 예전 디자인 유지 -->
+    <!-- 작성 폼: 상단 유지 -->
     <div class="panel" data-nosnippet>
       <h3>후기 작성</h3>
       <div class="row">
@@ -109,7 +122,7 @@
       </div>
     </div>
 
-    <!-- 🔎 검색/정렬 툴바 (폼 아래) -->
+    <!-- 목록 필터 -->
     <div class="toolbar">
       <input id="q" type="search" placeholder="검색: 내용/닉네임/태그" />
       <select id="sort">
@@ -126,12 +139,13 @@
       <button id="btnReset" class="btn btn-ghost">필터 초기화</button>
     </div>
 
-    <!-- ✅ 후기 목록(기록): 페이지 하단 -->
+    <!-- 후기 목록 -->
     <div id="list" class="grid"></div>
     <div id="pagination" class="pagination"></div>
 
     <div class="footer">
       ※ 본 게시판의 데이터는 브라우저 <strong>localStorage</strong>에 저장됩니다. 브라우저/기기 변경 시 보이지 않을 수 있어요.
+      <br/>단축키: <strong>Ctrl + Alt + A</strong> → 관리자 바 표시/숨김, <strong>H</strong> → 메인으로 이동
     </div>
   </div>
 
@@ -165,16 +179,15 @@
     // ===== 상태 =====
     let state = { q:"", sort:"new", page:1, pageSize:9, admin: localStorage.getItem(ADMIN_KEY) === "1" };
 
-    // ===== 초기 더미 데이터(없을 때만) =====
+    // ===== 더미 데이터(없을 때만) =====
     (function seed(){
-      const has = store.all().length>0;
-      if(has) return;
-      const sample = [
-        {id:uid(), title:"빠르게 정산 받았습니다", nickname:"하늘바람", content:"야간에도 바로 대응해주셔서 놀랐어요. 가위값도 챙겨주심!", rating:5, tags:["빠른거래","가위값"], createdAt:Date.now()-1000*60*60*20},
-        {id:uid(), title:"합리적인 가격", nickname:"초코우유", content:"시세 설명 친절, 가격 납득. 다음에도 이용할게요.", rating:5, tags:["합리적","친절"], createdAt:Date.now()-1000*60*60*60},
-        {id:uid(), title:"살짝 대기 있었음", nickname:"메린이", content:"주말이라 그런지 10분 정도 대기, 그래도 금방 처리!", rating:4, tags:["주말","대기"], createdAt:Date.now()-1000*60*60*80},
-      ];
-      store.save(sample);
+      if(store.all().length) return;
+      const now=Date.now();
+      store.save([
+        {id:uid(), title:"빠르게 정산 받았습니다", nickname:"하늘바람", content:"야간에도 바로 대응해주셔서 놀랐어요. 가위값도 챙겨주심!", rating:5, tags:["빠른거래","가위값"], createdAt:now-1000*60*60*20},
+        {id:uid(), title:"합리적인 가격", nickname:"초코우유", content:"시세 설명 친절, 가격 납득. 다음에도 이용할게요.", rating:5, tags:["합리적","친절"], createdAt:now-1000*60*60*60},
+        {id:uid(), title:"살짝 대기 있었음", nickname:"메린이", content:"주말이라 그런지 10분 정도 대기, 그래도 금방 처리!", rating:4, tags:["주말","대기"], createdAt:now-1000*60*60*80},
+      ]);
     })();
 
     // ===== DOM =====
@@ -204,14 +217,11 @@
       let arr = list.filter(x=>{
         if(!q) return true;
         const inTags = (x.tags||[]).join(",").toLowerCase().includes(q);
-        return (
-          (x.title||"").toLowerCase().includes(q) ||
-          (x.content||"").toLowerCase().includes(q) ||
-          (x.nickname||"").toLowerCase().includes(q) ||
-          inTags
-        );
+        return (x.title||"").toLowerCase().includes(q) ||
+               (x.content||"").toLowerCase().includes(q) ||
+               (x.nickname||"").toLowerCase().includes(q) ||
+               inTags;
       });
-
       arr.sort((a,b)=>{
         if(state.sort==="new") return b.createdAt - a.createdAt;
         if(state.sort==="old") return a.createdAt - b.createdAt;
@@ -219,7 +229,6 @@
         if(state.sort==="low") return (a.rating||0) - (b.rating||0);
         return 0;
       });
-
       return arr;
     }
 
@@ -251,9 +260,7 @@
           <div class="content">${esc(item.content||"")}</div>
           ${(item.tags&&item.tags.length)? `<div class="tags">${item.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`:""}
           <div class="actions" data-nosnippet>
-            ${state.admin ? `
-              <button class="btn btn-danger" data-act="del" data-id="${item.id}">삭제</button>
-            ` : ``}
+            ${state.admin ? `<button class="btn btn-danger" data-act="del" data-id="${item.id}">삭제</button>` : ``}
           </div>
         </article>
       `).join("");
@@ -289,6 +296,18 @@
     }
 
     // ===== 이벤트 =====
+    document.addEventListener("keydown", (e)=>{
+      // 관리자 바 토글: Ctrl + Alt + A
+      if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='a'){
+        const disp = getComputedStyle(adminBar).display;
+        adminBar.style.display = (disp==='none') ? 'flex' : 'none';
+      }
+      // 메인으로: H 키
+      if(!e.ctrlKey && !e.altKey && !e.shiftKey && e.key.toLowerCase()==='h'){
+        window.location.href = "/";
+      }
+    });
+
     $q.addEventListener("input", ()=>{ state.q = $q.value; state.page=1; render(); });
     $sort.addEventListener("change", ()=>{ state.sort = $sort.value; state.page=1; render(); });
     $pageSize.addEventListener("change", ()=>{ state.pageSize = parseInt($pageSize.value,10); state.page=1; render(); });
@@ -303,48 +322,28 @@
       const tags = $tags.value.split(",").map(s=>s.trim()).filter(Boolean);
       const title = $title.value.trim();
       const content = $content.value.trim();
-      if(!nickname || !content){
-        alert("닉네임과 내용은 필수입니다.");
-        return;
-      }
+      if(!nickname || !content){ alert("닉네임과 내용은 필수입니다."); return; }
       const item = { id:uid(), nickname, title, content, rating, tags, createdAt:Date.now() };
       store.upsert(item);
-      // 입력 초기화
       $content.value=""; $title.value=""; $tags.value=""; $rating.value="5";
       render();
-      // 목록으로 스크롤
       document.getElementById("list").scrollIntoView({behavior:"smooth", block:"start"});
     });
 
     $btnAdmin.addEventListener("click", ()=>{
       if(state.admin){
-        state.admin = false;
-        localStorage.setItem(ADMIN_KEY,"0");
+        state.admin=false; localStorage.setItem(ADMIN_KEY,"0");
       }else{
         const pin = prompt("관리자 PIN 입력");
-        if(pin === ADMIN_PIN){
-          state.admin = true;
-          localStorage.setItem(ADMIN_KEY,"1");
-        }else{
-          alert("PIN이 올바르지 않습니다.");
-        }
+        if(pin === ADMIN_PIN){ state.admin=true; localStorage.setItem(ADMIN_KEY,"1"); }
+        else{ alert("PIN이 올바르지 않습니다."); }
       }
       render();
     });
 
-    // ===== 관리자 바: 기본 숨김 + 단축키 토글(Ctrl+Alt+A) =====
-    adminBar.style.display = "none";
-    document.addEventListener("keydown", e=>{
-      if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='a'){
-        adminBar.style.display = adminBar.style.display==='none' ? 'flex' : 'none';
-      }
-    });
-
-    // ===== 부트 =====
+    // 초기엔 관리자 바 숨김
     (function init(){
-      const usp = new URLSearchParams(location.search);
-      if(usp.get("q")){ state.q = usp.get("q"); $q.value = state.q; }
-      if(usp.get("sort")){ state.sort = usp.get("sort"); $sort.value = state.sort; }
+      adminBar.style.display = "none";
       render();
     })();
   </script>
