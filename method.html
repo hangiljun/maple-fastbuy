@@ -3,40 +3,43 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>거래방법 | Maple FastBuy</title>
-  <meta name="description" content="메이플스토리 급처템 거래방법 안내 - Maple FastBuy" />
-  <link rel="canonical" href="https://maple-fastbuy.vercel.app/method.html" />
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="stylesheet" href="/style.css" />
+  <title>거래 절차 | Maple FastBuy</title>
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="./method.html" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header class="header">
-      <div class="brand">Maple FastBuy</div>
-      <nav class="nav">
-        <a href="/">홈</a>
-        <a href="/reviews.html">후기</a>
-        <a aria-current="page" href="/method.html">거래방법</a>
-      </nav>
-    </header>
+  <header class="site-header container">
+    <div class="brand">
+      <span class="dot"></span>
+      <a href="./" aria-label="Maple FastBuy 홈">Maple FastBuy</a>
+    </div>
+    <nav class="site-nav">
+      <a href="./reviews.html" class="btn ghost">후기 게시판</a>
+      <a href="./#contact" class="btn primary">빠른 문의</a>
+    </nav>
+  </header>
 
-    <main>
-      <section>
-        <h1>거래방법</h1>
-        <div class="card">
-          <ol>
-            <li><strong>카카오톡</strong>에서 <b>HAN8246</b> 추가 후 판매 문의</li>
-            <li>아이템 정보/서버/희망가 공유</li>
-            <li>시세 확인 후 <strong>견적 제시</strong> (보통 85% 이상)</li>
-            <li>거래 진행 및 <strong>안전한 정산</strong> 완료</li>
-          </ol>
-          <p class="muted">※ 모든 거래는 기록을 남기며, 빠른 시간 내에 정산합니다.</p>
-        </div>
-      </section>
-    </main>
+  <main class="container">
+    <section class="card">
+      <h2>거래 절차</h2>
+      <ol class="steps">
+        <li><strong>문의하기</strong> — 아이템/수량 공유</li>
+        <li><strong>시세 안내</strong> — 거래 방식/수수료/준비물 안내</li>
+        <li><strong>확인 및 정산</strong> — 확인 즉시 정산</li>
+        <li><strong>완료</strong> — 영수증 전송, 최종 안내</li>
+      </ol>
+      <div class="row">
+        <a class="btn primary" href="./#contact">지금 문의하기</a>
+        <a class="btn ghost" href="./">홈으로</a>
+      </div>
+    </section>
+  </main>
 
-    <footer class="footer">© <span id="y"></span> Maple FastBuy</footer>
-  </div>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <footer class="site-footer container">
+    <small>© <span id="year"></span> Maple FastBuy</small>
+  </footer>
+
+  <script src="./script.js" defer></script>
 </body>
 </html>
