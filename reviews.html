@@ -17,7 +17,7 @@
       --radius:18px;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,AppleSDGothicNeo,"Apple Color Emoji","Segoe UI Emoji",Pretendard,Inter,Arial}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,AppleSDGothicNeo,Pretendard,Inter,Arial}
     a{color:var(--accent);text-decoration:none}
     .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
 
@@ -28,6 +28,8 @@
     .logo{width:12px;height:12px;border-radius:4px;background:linear-gradient(135deg,var(--accent),var(--accent-2))}
     .title{font-weight:800;font-size:28px;letter-spacing:.2px}
     .nav-actions{display:flex;gap:8px;align-items:center}
+
+    /* 버튼 */
     .btn{
       padding:10px 12px;border-radius:12px;border:1px solid #223047;background:#0d1522;color:var(--text);
       cursor:pointer;transition:transform .06s ease,box-shadow .2s ease,border .2s ease;
@@ -63,7 +65,7 @@
     .tag{font-size:11px;color:#9fb3c8;background:#0c1220;border:1px solid #1c2433;padding:4px 8px;border-radius:999px}
     .card .actions{margin-top:12px;display:flex;gap:8px}
 
-    /* 작성 패널 (초안 디자인 유지) */
+    /* 작성 패널 */
     .panel{margin-top:24px;border:1px solid #1f2a37;background:#0c1320;border-radius:var(--radius);padding:16px}
     .panel h3{margin:0 0 12px 0;font-size:16px;color:#b6c9e6}
     .row{display:grid;gap:10px;grid-template-columns:1fr 1fr}
@@ -81,31 +83,27 @@
     .pagination{display:flex;gap:6px;flex-wrap:wrap;align-items:center;justify-content:center;margin:18px 0}
     .page-btn{padding:8px 10px;border-radius:10px;border:1px solid #263347;background:#0d1522;color:var(--text);cursor:pointer}
     .page-btn.active{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
-    [data-nosnippet]{user-select:none}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="header">
       <div class="brand">
-        <!-- 메인으로 -->
         <a href="/" aria-label="메인으로">
           <span class="logo"></span>
           <strong>Maple FastBuy</strong>
         </a>
       </div>
       <div class="nav-actions">
-        <!-- 메인으로 돌아가기 버튼 -->
         <a class="btn btn-ghost" href="/">← 메인으로</a>
         <div class="admin-bar" data-nosnippet>
           <span id="adminState" class="badge" style="display:none;">관리자 모드</span>
-          <!-- 관리자 PIN 입력창은 숨김(버튼만) -->
           <button id="btnAdmin" class="btn btn-ghost">관리자 전환</button>
         </div>
       </div>
     </div>
 
-    <!-- 작성 폼: 상단 유지 -->
+    <!-- 작성 폼 -->
     <div class="panel" data-nosnippet>
       <h3>후기 작성</h3>
       <div class="row">
@@ -122,7 +120,7 @@
       </div>
     </div>
 
-    <!-- 목록 필터 -->
+    <!-- 필터/목록 -->
     <div class="toolbar">
       <input id="q" type="search" placeholder="검색: 내용/닉네임/태그" />
       <select id="sort">
@@ -139,58 +137,38 @@
       <button id="btnReset" class="btn btn-ghost">필터 초기화</button>
     </div>
 
-    <!-- 후기 목록 -->
     <div id="list" class="grid"></div>
     <div id="pagination" class="pagination"></div>
 
     <div class="footer">
-      ※ 본 게시판의 데이터는 브라우저 <strong>localStorage</strong>에 저장됩니다. 브라우저/기기 변경 시 보이지 않을 수 있어요.
-      <br/>단축키: <strong>Ctrl + Alt + A</strong> → 관리자 바 표시/숨김, <strong>H</strong> → 메인으로 이동
+      ※ 데이터는 <strong>Firebase Firestore</strong>에 저장되어 기기 간 자동 동기화됩니다.
+      <br/>단축키: <strong>Ctrl + Alt + A</strong> → 관리자 바 표시/숨김
     </div>
   </div>
 
-  <script>
-    // ===== 상수/스토어 =====
-    const KEY = "mfb_reviews_v2";
-    const ADMIN_KEY = "mfb_admin_on";
-    const ADMIN_PIN = "8246";
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-    const store = {
-      all(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } },
-      save(list){ localStorage.setItem(KEY, JSON.stringify(list)); },
-      upsert(item){
-        const list = this.all();
-        const idx = list.findIndex(x => x.id === item.id);
-        if(idx >= 0) list[idx] = item; else list.unshift(item);
-        this.save(list);
-      },
-      remove(id){
-        const list = this.all().filter(x => x.id !== id);
-        this.save(list);
-      },
-      clear(){ localStorage.setItem(KEY, "[]"); },
+  <script>
+    // === Firebase 설정 ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFIZxBn2STV3J3RZddaa-Vu1pu_eL_wok",
+      authDomain: "maple-fastbuy.firebaseapp.com",
+      projectId: "maple-fastbuy",
+      storageBucket: "maple-fastbuy.firebasestorage.app",
+      messagingSenderId: "159863829103",
+      appId: "1:159863829103:web:9d5301dbb943db1f99d39a",
+      measurementId: "G-R12SVYKPXC"
     };
 
-    // ===== 유틸 =====
-    const uid = () => Math.random().toString(36).slice(2)+Date.now().toString(36);
-    const fmtDate = ts => new Date(ts).toLocaleString("ko-KR", { hour12:false });
-    const esc = s => (s||"").replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const reviewsCol = db.collection("reviews_mfb");
 
-    // ===== 상태 =====
-    let state = { q:"", sort:"new", page:1, pageSize:9, admin: localStorage.getItem(ADMIN_KEY) === "1" };
+    const ADMIN_PIN = "8246";
+    let state = { q:"", sort:"new", page:1, pageSize:9, admin:false, all:[] };
 
-    // ===== 더미 데이터(없을 때만) =====
-    (function seed(){
-      if(store.all().length) return;
-      const now=Date.now();
-      store.save([
-        {id:uid(), title:"빠르게 정산 받았습니다", nickname:"하늘바람", content:"야간에도 바로 대응해주셔서 놀랐어요. 가위값도 챙겨주심!", rating:5, tags:["빠른거래","가위값"], createdAt:now-1000*60*60*20},
-        {id:uid(), title:"합리적인 가격", nickname:"초코우유", content:"시세 설명 친절, 가격 납득. 다음에도 이용할게요.", rating:5, tags:["합리적","친절"], createdAt:now-1000*60*60*60},
-        {id:uid(), title:"살짝 대기 있었음", nickname:"메린이", content:"주말이라 그런지 10분 정도 대기, 그래도 금방 처리!", rating:4, tags:["주말","대기"], createdAt:now-1000*60*60*80},
-      ]);
-    })();
-
-    // ===== DOM =====
     const $list = document.getElementById("list");
     const $pagination = document.getElementById("pagination");
     const $q = document.getElementById("q");
@@ -207,145 +185,82 @@
     const $adminState = document.getElementById("adminState");
     const adminBar = document.querySelector(".admin-bar");
 
-    // ===== 렌더링 =====
-    function applyAdminUI(){
-      $adminState.style.display = state.admin ? "inline-flex" : "none";
-    }
+    const esc = s => (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+    const fmt = ts => ts?.toDate ? ts.toDate() : new Date(ts||Date.now());
+    const stars = n => "★".repeat(n)+"☆".repeat(Math.max(0,5-n));
+    function applyAdminUI(){ $adminState.style.display = state.admin ? "inline-flex" : "none"; }
 
     function filterSort(list){
       const q = state.q.trim().toLowerCase();
       let arr = list.filter(x=>{
-        if(!q) return true;
-        const inTags = (x.tags||[]).join(",").toLowerCase().includes(q);
-        return (x.title||"").toLowerCase().includes(q) ||
-               (x.content||"").toLowerCase().includes(q) ||
-               (x.nickname||"").toLowerCase().includes(q) ||
-               inTags;
+        if(!q)return true;
+        const tags=(x.tags||[]).join(",").toLowerCase();
+        return (x.title||"").toLowerCase().includes(q)||(x.content||"").toLowerCase().includes(q)||(x.nickname||"").toLowerCase().includes(q)||tags.includes(q);
       });
       arr.sort((a,b)=>{
-        if(state.sort==="new") return b.createdAt - a.createdAt;
-        if(state.sort==="old") return a.createdAt - b.createdAt;
-        if(state.sort==="high") return (b.rating||0) - (a.rating||0);
-        if(state.sort==="low") return (a.rating||0) - (b.rating||0);
-        return 0;
+        if(state.sort==="new")return (b.createdAt?.toMillis?.()??b.createdAt)-(a.createdAt?.toMillis?.()??a.createdAt);
+        if(state.sort==="old")return (a.createdAt?.toMillis?.()??a.createdAt)-(b.createdAt?.toMillis?.()??b.createdAt);
+        if(state.sort==="high")return(b.rating||0)-(a.rating||0);
+        if(state.sort==="low")return(a.rating||0)-(b.rating||0);
       });
       return arr;
     }
 
     function paginate(list){
-      const start = (state.page-1)*state.pageSize;
-      return list.slice(start, start+state.pageSize);
-    }
-
-    function stars(n){
-      const full = "★".repeat(n);
-      const empty = "☆".repeat(Math.max(0,5-n));
-      return `<span class="star" aria-label="별점 ${n}점">${full}${empty}</span>`;
+      const start=(state.page-1)*state.pageSize;
+      return list.slice(start,start+state.pageSize);
     }
 
     function render(){
       applyAdminUI();
-      const all = store.all();
-      const filtered = filterSort(all);
-      const paged = paginate(filtered);
-
-      $list.innerHTML = paged.map(item=>`
+      const filtered=filterSort(state.all);
+      const paged=paginate(filtered);
+      $list.innerHTML=paged.map(x=>`
         <article class="card">
-          <div class="meta">
-            <span class="nick">@${esc(item.nickname||"익명")}</span>
-            <span>${fmtDate(item.createdAt||Date.now())}</span>
-          </div>
-          <div class="rating">${stars(item.rating||5)}</div>
-          ${item.title? `<h4 style="margin:.4rem 0 .2rem 0">${esc(item.title)}</h4>`:""}
-          <div class="content">${esc(item.content||"")}</div>
-          ${(item.tags&&item.tags.length)? `<div class="tags">${item.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`:""}
-          <div class="actions" data-nosnippet>
-            ${state.admin ? `<button class="btn btn-danger" data-act="del" data-id="${item.id}">삭제</button>` : ``}
-          </div>
-        </article>
-      `).join("");
+          <div class="meta"><span class="nick">@${esc(x.nickname||"익명")}</span><span>${fmt(x.createdAt).toLocaleString("ko-KR",{hour12:false})}</span></div>
+          <div class="rating">${stars(x.rating||5)}</div>
+          ${x.title?`<h4 style="margin:.4rem 0 .2rem 0">${esc(x.title)}</h4>`:""}
+          <div class="content">${esc(x.content||"")}</div>
+          ${(x.tags?.length)?`<div class="tags">${x.tags.map(t=>`<span class="tag">#${esc(t)}</span>`).join("")}</div>`:""}
+          ${state.admin?`<div class="actions"><button class="btn btn-danger" data-del="${x.id}">삭제</button></div>`:""}
+        </article>`).join("");
 
-      // 삭제 핸들러
-      $list.querySelectorAll("[data-act='del']").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const id = btn.getAttribute("data-id");
-          if(confirm("정말 이 후기를 삭제하시겠습니까?")){
-            store.remove(id);
-            const totalAfter = filterSort(store.all()).length;
-            const maxPage = Math.max(1, Math.ceil(totalAfter/state.pageSize));
-            if(state.page>maxPage) state.page = maxPage;
-            render();
-          }
-        });
+      document.querySelectorAll("[data-del]").forEach(b=>{
+        b.onclick=async()=>{const id=b.getAttribute("data-del");if(confirm("삭제하시겠습니까?"))await reviewsCol.doc(id).delete();};
       });
 
-      // 페이지네이션
-      const total = filtered.length;
-      const maxPage = Math.max(1, Math.ceil(total/state.pageSize));
-      const pages = Array.from({length:maxPage}, (_,i)=>i+1);
-      $pagination.innerHTML = pages.map(p=>`
-        <button class="page-btn ${p===state.page?"active":""}" data-page="${p}">${p}</button>
-      `).join("");
+      const total=filtered.length;
+      const maxPage=Math.max(1,Math.ceil(total/state.pageSize));
+      $pagination.innerHTML=Array.from({length:maxPage},(_,i)=>i+1).map(p=>`
+        <button class="page-btn ${p===state.page?"active":""}" data-page="${p}">${p}</button>`).join("");
       $pagination.querySelectorAll(".page-btn").forEach(b=>{
-        b.addEventListener("click", ()=>{
-          state.page = parseInt(b.getAttribute("data-page"),10);
-          render();
-          window.scrollTo({top:0,behavior:"smooth"});
-        });
+        b.onclick=()=>{state.page=parseInt(b.dataset.page);render();window.scrollTo({top:0,behavior:"smooth"});};
       });
     }
 
-    // ===== 이벤트 =====
-    document.addEventListener("keydown", (e)=>{
-      // 관리자 바 토글: Ctrl + Alt + A
-      if(e.ctrlKey && e.altKey && e.key.toLowerCase()==='a'){
-        const disp = getComputedStyle(adminBar).display;
-        adminBar.style.display = (disp==='none') ? 'flex' : 'none';
-      }
-      // 메인으로: H 키
-      if(!e.ctrlKey && !e.altKey && !e.shiftKey && e.key.toLowerCase()==='h'){
-        window.location.href = "/";
-      }
+    reviewsCol.orderBy("createdAt","desc").onSnapshot(snap=>{
+      state.all=snap.docs.map(d=>({id:d.id,...d.data()}));render();
     });
 
-    $q.addEventListener("input", ()=>{ state.q = $q.value; state.page=1; render(); });
-    $sort.addEventListener("change", ()=>{ state.sort = $sort.value; state.page=1; render(); });
-    $pageSize.addEventListener("change", ()=>{ state.pageSize = parseInt($pageSize.value,10); state.page=1; render(); });
-    $btnReset.addEventListener("click", ()=>{
-      $q.value = ""; $sort.value="new"; $pageSize.value="9";
-      state.q=""; state.sort="new"; state.pageSize=9; state.page=1; render();
-    });
+    $btnAdd.onclick=async()=>{
+      const nickname=$nickname.value.trim();
+      const rating=Math.min(5,Math.max(1,parseInt($rating.value||"5",10)));
+      const tags=$tags.value.split(",").map(s=>s.trim()).filter(Boolean);
+      const title=$title.value.trim();
+      const content=$content.value.trim();
+      if(!nickname||!content)return alert("닉네임과 내용은 필수입니다.");
+      await reviewsCol.add({nickname,title,content,tags,rating,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+      $content.value="";$title.value="";$tags.value="";$rating.value="5";
+    };
 
-    $btnAdd.addEventListener("click", ()=>{
-      const nickname = $nickname.value.trim();
-      const rating = Math.min(5,Math.max(1, parseInt($rating.value||"5",10)));
-      const tags = $tags.value.split(",").map(s=>s.trim()).filter(Boolean);
-      const title = $title.value.trim();
-      const content = $content.value.trim();
-      if(!nickname || !content){ alert("닉네임과 내용은 필수입니다."); return; }
-      const item = { id:uid(), nickname, title, content, rating, tags, createdAt:Date.now() };
-      store.upsert(item);
-      $content.value=""; $title.value=""; $tags.value=""; $rating.value="5";
-      render();
-      document.getElementById("list").scrollIntoView({behavior:"smooth", block:"start"});
-    });
+    $q.oninput=()=>{state.q=$q.value;state.page=1;render();};
+    $sort.onchange=()=>{state.sort=$sort.value;state.page=1;render();};
+    $pageSize.onchange=()=>{state.pageSize=parseInt($pageSize.value);state.page=1;render();};
+    $btnReset.onclick=()=>{$q.value="";state.q="";state.sort="new";state.pageSize=9;render();};
 
-    $btnAdmin.addEventListener("click", ()=>{
-      if(state.admin){
-        state.admin=false; localStorage.setItem(ADMIN_KEY,"0");
-      }else{
-        const pin = prompt("관리자 PIN 입력");
-        if(pin === ADMIN_PIN){ state.admin=true; localStorage.setItem(ADMIN_KEY,"1"); }
-        else{ alert("PIN이 올바르지 않습니다."); }
-      }
-      render();
-    });
-
-    // 초기엔 관리자 바 숨김
-    (function init(){
-      adminBar.style.display = "none";
-      render();
-    })();
+    $btnAdmin.onclick=()=>{if(state.admin){state.admin=false;render();}else{const pin=prompt("관리자 PIN 입력");if(pin===ADMIN_PIN){state.admin=true;render();}else alert("PIN이 올바르지 않습니다.");}};
+    adminBar.style.display="none";
+    document.addEventListener("keydown",e=>{if(e.ctrlKey&&e.altKey&&e.key.toLowerCase()==="a"){adminBar.style.display=adminBar.style.display==="none"?"flex":"none";}});
   </script>
 </body>
 </html>
