@@ -26,8 +26,7 @@
       --bg:#0b0f14; --panel:#111821; --muted:#6b7a90; --text:#e9eef5; --accent:#4cc9f0; --accent-2:#90e0ef;
       --ok:#2dd4bf; --warn:#f59e0b; --danger:#ef4444; --ring:rgba(76,201,240,.35);
       --radius:18px;
-      /* ✅ 카카오 버튼 색상 추가 */
-      --kakao:#FEE500; --kakao-text:#191600;
+      --kakao:#FEE500; --kakao-text:#191600; /* 카카오 버튼 */
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,AppleSDGothicNeo,Pretendard,Inter,Arial}
@@ -52,7 +51,6 @@
     .btn-primary{background:#0b1f1c;border-color:#1e3a34;color:#b3fff0}
     .btn-ghost{background:transparent;border-color:#28374f}
     .btn-light{background:#0f1623;border-color:#1f2a37}
-    /* ✅ 카카오 전용 버튼 스타일 */
     .btn-kakao{background:var(--kakao); color:var(--kakao-text); border:none; font-weight:700;}
     .btn-kakao:hover{box-shadow:0 6px 16px rgba(255,229,0,.35); transform:translateY(-1px);}
 
@@ -133,7 +131,7 @@
       </a>
       <nav>
         <a class="btn btn-ghost" href="/reviews.html">후기 게시판</a>
-        <!-- ✅ 상단 빠른 문의: 카카오 URL + 노란 버튼 -->
+        <!-- 상단 빠른 문의: 카카오 URL + 노란 버튼 -->
         <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank" rel="noopener">빠른 문의</a>
       </nav>
     </div>
@@ -185,32 +183,22 @@
         <div class="step"><b>즉시 정산</b> — 확인 완료 즉시 정산 처리.</div>
       </div>
       <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
-        <!-- ✅ 거래절차의 지금 문의하기: 카카오 URL + 노란 버튼 -->
+        <!-- 거래절차의 지금 문의하기: 카카오 URL + 노란 버튼 -->
         <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank" rel="noopener">지금 문의하기</a>
         <a class="btn btn-light" href="/reviews.html">후기 더 보기</a>
       </div>
     </div>
   </section>
 
-  <!-- 리뷰 미리보기 -->
+  <!-- 이용자 후기 (Firestore에서 최신 3개 가져와 렌더링) -->
   <section class="wrap">
     <h2 class="section-title">이용자 후기</h2>
-    <div class="reviews">
-      <article class="rev">
-        <div class="meta"><span class="nick">@하늘바람</span><span>최근</span></div>
-        <div class="stars">★★★★★</div>
-        <p>야간에도 바로 대응해주셔서 놀랐어요. 가위값도 챙겨주심!</p>
-      </article>
-      <article class="rev">
-        <div class="meta"><span class="nick">@초코우유</span><span>최근</span></div>
-        <div class="stars">★★★★★</div>
-        <p>시세 설명 친절, 가격 납득. 다음에도 이용할게요.</p>
-      </article>
-      <article class="rev">
-        <div class="meta"><span class="nick">@메린이</span><span>최근</span></div>
-        <div class="stars">★★★★☆</div>
-        <p>주말이라 10분 대기. 그래도 금방 처리!</p>
-      </article>
+    <div id="reviewsPreview" class="reviews">
+      <!-- 📌 자바스크립트로 Firestore에서 가져와서 여기에 카드 3개를 그립니다. -->
+      <!-- (자바스크립트 비활성/로딩 실패 대비용 간단 플레이스홀더) -->
+      <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
+      <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
+      <article class="rev"><div class="meta"><span class="nick">로딩 중…</span><span>&nbsp;</span></div><div class="stars">★★★★★</div><p class="muted">실제 후기를 불러오는 중입니다.</p></article>
     </div>
     <div style="margin-top:12px">
       <a class="btn btn-light" href="/reviews.html">후기 게시판으로 이동</a>
@@ -225,7 +213,6 @@
         <span class="muted">카카오톡 아이디:</span>
         <code id="kakaoId">HAN8246</code>
         <button id="copyKakao" class="btn btn-ghost">아이디 복사</button>
-        <!-- ✅ 연락 섹션 버튼도 노란색 유지 (URL 기존과 동일) -->
         <a class="btn btn-kakao" href="https://open.kakao.com/o/sKg86b7f" target="_blank" rel="noopener">카카오톡으로 문의</a>
       </div>
       <p class="muted">오픈채팅 또는 아이디로 메시지 주세요. 가능한 시간엔 즉시 응대합니다.</p>
@@ -243,14 +230,27 @@
     </div>
   </footer>
 
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
   <script>
+    // ✅ 너가 제공한 firebaseConfig 그대로 사용 (모듈이 아닌 CDN compat 방식)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBFI2xBn2STV3J3RZ0daa-Vu1pu_eL_wok",
+      authDomain: "maple-fastbuy.firebaseapp.com",
+      projectId: "maple-fastbuy",
+      storageBucket: "maple-fastbuy.firebasestorage.app",
+      messagingSenderId: "159863829103",
+      appId: "1:159863829103:web:9d5301dbb943bd1f99d39a",
+      measurementId: "G-R12SVPXPRC"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const reviewsCol = db.collection("reviews_mfb");
+
     // 연도
     document.getElementById('yy').textContent = new Date().getFullYear();
-
-    // FAQ 토글
-    document.querySelectorAll('.faq .item .q').forEach(q=>{
-      q.addEventListener('click', ()=> q.parentElement.classList.toggle('open'));
-    });
 
     // 카카오톡 아이디 복사
     document.getElementById('copyKakao').addEventListener('click', ()=>{
@@ -267,6 +267,37 @@
         const target=document.getElementById(id);
         if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth',block:'start'}); }
       });
+    });
+
+    // ====== 🔗 메인에 Firestore 최신 후기 3개 연동 ======
+    const $preview = document.getElementById('reviewsPreview');
+    const esc = s => (s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;","<": "&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
+    const stars = n => "★".repeat(n||5)+"☆".repeat(Math.max(0,5-(n||5)));
+    const fmt = ts => ts?.toDate ? ts.toDate() : new Date(ts||Date.now());
+
+    // createdAt 최신순 3개만 구독(실시간)
+    reviewsCol.orderBy("createdAt","desc").limit(3).onSnapshot(snap=>{
+      const items = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+      if(!items.length){
+        $preview.innerHTML = `
+          <article class="rev"><div class="meta"><span class="nick">아직 후기가 없어요</span><span>&nbsp;</span></div><p class="muted">첫 후기를 남겨보세요!</p></article>
+        `;
+        return;
+      }
+      $preview.innerHTML = items.map(x=>`
+        <article class="rev">
+          <div class="meta"><span class="nick">@${esc(x.nickname||"익명")}</span><span>${fmt(x.createdAt).toLocaleDateString("ko-KR")}</span></div>
+          <div class="stars">${stars(x.rating||5)}</div>
+          ${x.title? `<p style="margin:.35rem 0 .15rem 0"><b>${esc(x.title)}</b></p>` : ``}
+          <p>${esc(x.content||"")}</p>
+        </article>
+      `).join("");
+    }, err=>{
+      console.error(err);
+      // 에러 시에도 페이지가 비어 보이지 않게 안내
+      $preview.innerHTML = `
+        <article class="rev"><div class="meta"><span class="nick">불러오기 실패</span><span>&nbsp;</span></div><p class="muted">후기 로딩에 문제가 있습니다. 잠시 후 다시 시도해주세요.</p></article>
+      `;
     });
   </script>
 </body>
