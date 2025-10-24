@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>후기 게시판 | Maple FastBuy</title>
 
-  <!-- 기본 SEO -->
   <meta name="description" content="메이플스토리 급처템 거래 후기 게시판 - Maple FastBuy 이용자들의 실제 후기 모음" />
   <link rel="canonical" href="/reviews.html" />
   <meta name="robots" content="index,follow" />
@@ -18,36 +17,34 @@
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:Pretendard,Inter,Arial,sans-serif}
-    a{color:var(--accent)}
     .wrap{max-width:1100px;margin:40px auto;padding:0 16px}
     .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
     .title{font-weight:800;font-size:28px}
     .toolbar{display:grid;grid-template-columns:1fr 140px 140px 120px;gap:10px;margin:16px 0}
-    input[type="search"],select{
-      width:100%;padding:12px 14px;border-radius:12px;border:1px solid #1f2937;background:#0f1520;color:var(--text);
+    input,textarea,select{
+      background:#0f1520;border:1px solid #1f2937;color:var(--text);
+      border-radius:12px;padding:12px 14px;outline:none;width:100%;
     }
-    input[type="search"]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
+    input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
     .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
     .card{
       background:linear-gradient(180deg,#0f1623,#0d1320 60%);
       border:1px solid #1f2a37;border-radius:var(--radius);padding:16px;
     }
-    .meta{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#9fb3c8;margin-bottom:8px}
+    .meta{display:flex;justify-content:space-between;color:#9fb3c8;font-size:12px;margin-bottom:8px}
     .nick{font-weight:700;color:#b3d7ff}
     .rating{color:#facc15}
     .content{white-space:pre-wrap;line-height:1.6;margin-top:6px}
     .tags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
     .tag{font-size:11px;color:#9fb3c8;background:#0c1220;border:1px solid #1c2433;padding:4px 8px;border-radius:999px}
-    .btn{padding:8px 10px;border-radius:10px;border:1px solid #243045;background:#0e1420;color:#dce7f7;cursor:pointer}
-    .btn-warn{border-color:#3a2a12;background:#1a1409;color:#ffd699}
-    .btn-danger{border-color:#3a1212;background:#1a0a0a;color:#ffc7c7}
+    .btn{padding:10px 12px;border-radius:10px;border:1px solid #243045;background:#0e1420;color:#dce7f7;cursor:pointer}
+    .btn:hover{opacity:.9}
+    .btn-ok{background:#0b1f1c;border-color:#1e3a34;color:#b3fff0}
+    .btn-danger{background:#1a0a0a;border-color:#3a1212;color:#ffc7c7}
     .panel{margin-top:24px;border:1px solid #1f2a37;background:#0c1320;border-radius:var(--radius);padding:16px}
-    .footer{margin:40px 0;color:#6b7a90;font-size:12px}
+    .footer{margin:40px 0;color:#6b7a90;font-size:12px;text-align:center}
     .admin-bar{display:flex;gap:10px;align-items:center}
     .badge{padding:6px 10px;border-radius:999px;background:#0c1a12;border:1px solid #1b3a2c;color:#a7f3d0;font-size:12px}
-    .pagination{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:18px 0}
-    .page-btn{padding:8px 10px;border-radius:10px;border:1px solid #263347;background:#0d1522;color:var(--text);cursor:pointer}
-    .page-btn.active{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring)}
     [data-nosnippet]{user-select:none}
   </style>
 </head>
@@ -57,7 +54,7 @@
       <div class="title">후기 게시판</div>
       <div class="admin-bar" data-nosnippet>
         <span id="adminState" class="badge" style="display:none;">관리자 모드</span>
-        <!-- PIN 입력창 삭제 -->
+        <!-- 관리자 PIN 입력창 숨김 -->
         <button id="btnAdmin" class="btn btn-ghost">관리자 전환</button>
       </div>
     </div>
@@ -81,91 +78,81 @@
     <div id="list" class="grid"></div>
     <div id="pagination" class="pagination"></div>
 
+    <!-- 후기 작성 영역: 기존 디자인 그대로 유지 -->
     <div class="panel" data-nosnippet>
       <h3>후기 작성</h3>
-      <input id="nickname" type="text" placeholder="닉네임 (필수)" style="width:100%;margin-bottom:10px">
-      <input id="rating" type="number" min="1" max="5" value="5" placeholder="별점 (1~5)" style="width:100%;margin-bottom:10px">
-      <input id="tags" type="text" placeholder="태그 (쉼표로 구분)" style="width:100%;margin-bottom:10px">
-      <textarea id="content" placeholder="후기 내용을 입력해주세요 (필수)" style="width:100%;min-height:100px"></textarea>
-      <button id="btnAdd" class="btn" style="margin-top:10px;background:#0b1f1c;border-color:#1e3a34;color:#b3fff0">등록</button>
+      <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <input id="nickname" type="text" placeholder="닉네임 (필수)">
+        <input id="rating" type="number" min="1" max="5" step="1" value="5" placeholder="별점 (1~5)">
+      </div>
+      <div class="row" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+        <input id="tags" type="text" placeholder="태그 (쉼표로 구분, 예: 빠른거래,가위값)">
+        <input id="title" type="text" placeholder="제목 (선택)">
+      </div>
+      <div class="row" style="display:grid;grid-template-columns:3fr 1fr;gap:10px;margin-top:10px;">
+        <textarea id="content" placeholder="후기 내용을 입력해주세요 (필수)"></textarea>
+        <button id="btnAdd" class="btn btn-ok">후기 등록</button>
+      </div>
     </div>
 
-    <div class="footer">※ 이 게시판은 브라우저 localStorage에 저장됩니다.</div>
+    <div class="footer">
+      ※ 본 게시판의 데이터는 브라우저 <strong>localStorage</strong>에 저장됩니다. 브라우저/기기 변경 시 보이지 않을 수 있어요.
+    </div>
   </div>
 
   <script>
-    const KEY = "mfb_reviews_v2";
-    const ADMIN_KEY = "mfb_admin_on";
-    const ADMIN_PIN = "8246";
-
-    const store = {
-      all(){ return JSON.parse(localStorage.getItem(KEY)||"[]"); },
-      save(list){ localStorage.setItem(KEY, JSON.stringify(list)); },
-      upsert(item){
-        const list=this.all();
-        const i=list.findIndex(x=>x.id===item.id);
-        if(i>=0) list[i]=item; else list.unshift(item);
-        this.save(list);
-      },
-      remove(id){ this.save(this.all().filter(x=>x.id!==id)); }
-    };
-
+    const KEY="mfb_reviews_v2", ADMIN_KEY="mfb_admin_on", ADMIN_PIN="8246";
+    const store={all(){return JSON.parse(localStorage.getItem(KEY)||"[]");},
+      save(l){localStorage.setItem(KEY,JSON.stringify(l));},
+      upsert(i){const l=this.all();const n=l.findIndex(x=>x.id===i.id);
+        if(n>=0)l[n]=i;else l.unshift(i);this.save(l);},
+      remove(id){this.save(this.all().filter(x=>x.id!==id));}};
     const uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
-    const fmtDate=ts=>new Date(ts).toLocaleString("ko-KR",{hour12:false});
-
+    const fmtDate=t=>new Date(t).toLocaleString("ko-KR",{hour12:false});
     let state={q:"",sort:"new",page:1,pageSize:9,admin:localStorage.getItem(ADMIN_KEY)==="1"};
-
-    const $list=document.getElementById("list");
-    const $pagination=document.getElementById("pagination");
-    const $q=document.getElementById("q");
-    const $sort=document.getElementById("sort");
-    const $pageSize=document.getElementById("pageSize");
-    const $btnReset=document.getElementById("btnReset");
-    const $nickname=document.getElementById("nickname");
-    const $rating=document.getElementById("rating");
-    const $tags=document.getElementById("tags");
-    const $content=document.getElementById("content");
-    const $btnAdd=document.getElementById("btnAdd");
-    const $btnAdmin=document.getElementById("btnAdmin");
-    const $adminState=document.getElementById("adminState");
-    const adminBar=document.querySelector(".admin-bar");
+    const $list=document.getElementById("list"),$pagination=document.getElementById("pagination"),
+          $q=document.getElementById("q"),$sort=document.getElementById("sort"),
+          $pageSize=document.getElementById("pageSize"),$btnReset=document.getElementById("btnReset"),
+          $nickname=document.getElementById("nickname"),$rating=document.getElementById("rating"),
+          $tags=document.getElementById("tags"),$title=document.getElementById("title"),
+          $content=document.getElementById("content"),$btnAdd=document.getElementById("btnAdd"),
+          $btnAdmin=document.getElementById("btnAdmin"),$adminState=document.getElementById("adminState"),
+          adminBar=document.querySelector(".admin-bar");
 
     function render(){
       $adminState.style.display=state.admin?"inline-flex":"none";
-      const list=store.all().filter(x=>{
-        const q=state.q.trim().toLowerCase();
-        return !q || (x.content+x.nickname+(x.tags||[]).join(",")).toLowerCase().includes(q);
-      }).sort((a,b)=>{
-        if(state.sort==="new") return b.createdAt-a.createdAt;
-        if(state.sort==="old") return a.createdAt-b.createdAt;
-        if(state.sort==="high") return b.rating-a.rating;
-        if(state.sort==="low") return a.rating-b.rating;
+      const q=state.q.toLowerCase();
+      let list=store.all().filter(x=>!q||(x.content+x.nickname+(x.tags||[]).join(",")).toLowerCase().includes(q));
+      list.sort((a,b)=>{
+        if(state.sort==="new")return b.createdAt-a.createdAt;
+        if(state.sort==="old")return a.createdAt-b.createdAt;
+        if(state.sort==="high")return b.rating-a.rating;
+        if(state.sort==="low")return a.rating-b.rating;
       });
       const pageList=list.slice((state.page-1)*state.pageSize,state.page*state.pageSize);
       $list.innerHTML=pageList.map(x=>`
-        <article class="card">
-          <div class="meta"><span class="nick">@${x.nickname}</span><span>${fmtDate(x.createdAt)}</span></div>
-          <div class="rating">${"★".repeat(x.rating)}${"☆".repeat(5-x.rating)}</div>
-          <div class="content">${x.content}</div>
-          ${(x.tags?.length)?`<div class="tags">${x.tags.map(t=>`<span class="tag">#${t}</span>`).join("")}</div>`:""}
-          ${state.admin?`<div class="actions"><button class="btn btn-danger" data-id="${x.id}">삭제</button></div>`:""}
-        </article>`).join("");
-      document.querySelectorAll(".btn-danger").forEach(b=>{
-        b.onclick=()=>{ if(confirm("삭제하시겠습니까?")){store.remove(b.dataset.id);render();}};
-      });
-      const pages=Math.ceil(list.length/state.pageSize);
-      $pagination.innerHTML=Array.from({length:pages},(_,i)=>`
-        <button class="page-btn ${i+1===state.page?"active":""}" data-p="${i+1}">${i+1}</button>`).join("");
-      document.querySelectorAll(".page-btn").forEach(b=>{
-        b.onclick=()=>{state.page=parseInt(b.dataset.p);render();};
+      <article class="card">
+        <div class="meta"><span class="nick">@${x.nickname}</span><span>${fmtDate(x.createdAt)}</span></div>
+        <div class="rating">${"★".repeat(x.rating)}${"☆".repeat(5-x.rating)}</div>
+        ${x.title?`<h4>${x.title}</h4>`:""}
+        <div class="content">${x.content}</div>
+        ${(x.tags?.length)?`<div class="tags">${x.tags.map(t=>`<span class="tag">#${t}</span>`).join("")}</div>`:""}
+        ${state.admin?`<div class="actions"><button class="btn btn-danger" data-id="${x.id}">삭제</button></div>`:""}
+      </article>`).join("");
+      document.querySelectorAll(".btn-danger").forEach(b=>b.onclick=()=>{
+        if(confirm("삭제하시겠습니까?")){store.remove(b.dataset.id);render();}
       });
     }
 
     $btnAdd.onclick=()=>{
       const n=$nickname.value.trim(), c=$content.value.trim();
-      if(!n||!c) return alert("닉네임과 내용은 필수입니다.");
-      const item={id:uid(),nickname:n,content:c,tags:$tags.value.split(",").map(s=>s.trim()).filter(Boolean),rating:parseInt($rating.value)||5,createdAt:Date.now()};
-      store.upsert(item);$content.value="";$tags.value="";render();
+      if(!n||!c)return alert("닉네임과 내용은 필수입니다.");
+      const item={id:uid(),nickname:n,title:$title.value.trim(),content:c,
+        tags:$tags.value.split(",").map(s=>s.trim()).filter(Boolean),
+        rating:parseInt($rating.value)||5,createdAt:Date.now()};
+      store.upsert(item);
+      $content.value="";$title.value="";$tags.value="";$rating.value="5";
+      render();
     };
 
     $q.oninput=()=>{state.q=$q.value;render();};
@@ -176,13 +163,13 @@
     $btnAdmin.onclick=()=>{
       if(state.admin){state.admin=false;localStorage.setItem(ADMIN_KEY,"0");render();}
       else{
-        const pin=prompt("관리자 PIN을 입력하세요");
+        const pin=prompt("관리자 PIN 입력");
         if(pin===ADMIN_PIN){state.admin=true;localStorage.setItem(ADMIN_KEY,"1");render();}
-        else alert("PIN이 틀렸습니다");
+        else alert("PIN이 틀렸습니다.");
       }
     };
 
-    // 처음부터 관리자 바 숨기고, Ctrl+Alt+A로 표시/숨김
+    // 처음엔 관리자바 숨기기 + 단축키 Ctrl+Alt+A로 표시
     adminBar.style.display="none";
     document.addEventListener("keydown",e=>{
       if(e.ctrlKey&&e.altKey&&e.key.toLowerCase()==="a"){
